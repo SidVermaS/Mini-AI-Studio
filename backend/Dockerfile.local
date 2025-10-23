@@ -1,0 +1,45 @@
+###########################
+# Define base images for each stage
+ARG DEPS_IMAGE=node:22-alpine
+ARG BUILD_IMAGE=node:22-alpine
+ARG RUNTIME_IMAGE=node:22-alpine
+###########################
+
+
+###########################  
+# Stage 1: Install dependencies
+FROM $DEPS_IMAGE AS deps
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY prisma ./prisma
+RUN npx prisma generate
+###########################
+
+
+
+###########################
+# Stage 2: Build the application
+FROM $BUILD_IMAGE AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/prisma ./prisma
+COPY package*.json tsconfig.json ./
+COPY src ./src
+RUN npm run build
+###########################
+
+
+###########################
+# Stage 3: Prepare runtime image
+FROM $RUNTIME_IMAGE AS runtime
+WORKDIR /app
+COPY --from=deps /app/package*.json ./
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app/prisma ./prisma
+COPY --from=builder /app/dist ./dist
+RUN npm ci --only=production && npm cache clean --force
+EXPOSE 4000
+# CMD ["sh", "-c", "npm run migrate && npm run seed && npm run dev"]
+CMD ["sh", "-c", "npm run migrate && npm run dev"]
+###########################
