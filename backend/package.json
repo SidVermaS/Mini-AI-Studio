@@ -8,20 +8,24 @@
     "dev": "ts-node-dev --respawn --transpile-only --require tsconfig-paths/register --watch src",
     "lint": "eslint . --ext .ts --ignore-pattern dist/",
     "lint:fix": "eslint . --ext .ts --ignore-pattern dist/ --fix",
-    "fmt": "prettier --write . && npm run fmt:all"
+    "fmt": "prettier --write . && npm run fmt:all",
+    "migrate": "prisma migrate dev --name init",
+    "generate": "cp .env.local .env && prisma generate"
   },
   "keywords": [],
-  "author": "",
+  "author": "Sid Verma",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "@fastify/cors": "^10.0.0",
     "@fastify/helmet": "^13.0.2",
+    "@fastify/jwt": "^10.0.0",
     "@fastify/multipart": "^9.2.1",
     "@fastify/rate-limit": "^10.3.0",
     "@prisma/client": "^6.18.0",
     "fastify": "^5.6.1",
-    "fastify-healthcheck": "^4.4.0"
+    "fastify-healthcheck": "^4.4.0",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@types/node": "^24.9.1",

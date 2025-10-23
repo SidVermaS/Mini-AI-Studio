@@ -8,7 +8,7 @@ import { fastifyRateLimit } from '@fastify/rate-limit';
 import fastifyMultipart from '@fastify/multipart';
 import fastifyHealthcheck from 'fastify-healthcheck';
 
-const setupServer = async () => {
+const buildServer = async () => {
     const app = Fastify({ logger: ENV.NODE_ENV !== 'production', ignoreTrailingSlash: true, trustProxy: true });
 
     // Register your routes and middleware here
@@ -17,7 +17,7 @@ const setupServer = async () => {
         methods: ['GET', 'POST', 'PATCH', 'DELETE',],
         credentials: true
     }).register(fastifyHelmet).register(fastifyRateLimit, {
-        max: 100,
+        max: 10,
         timeWindow: 60000,  // 1 minute in milliseconds (60 * 1000)
         cache: 100,
         ban: 2,  // Ban IP for exceeding limit twice
@@ -39,9 +39,9 @@ const setupServer = async () => {
 };
 
 const startServer = async () => {
-    const app = await setupServer();
+    const app = await buildServer();
 
-    await app.listen({ port: ENV.PORT, host: '0.0.0.0' }, (err, address) => {
+    await app.listen({ port: ENV.BACKEND_PORT, host: '0.0.0.0' }, (err, address) => {
         if (err) {
             app.log.error(err);
             process.exit(1);

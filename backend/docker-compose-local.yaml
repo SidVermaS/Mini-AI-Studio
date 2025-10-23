@@ -1,8 +1,8 @@
 name: backend-local
 services:
-  backend-postgres-db:
+  backend_postgres_db:
     image: postgres:18-alpine
-    container_name: backend-postgres-db
+    container_name: backend_postgres_db
     env_file:
       - .env.local
     ports:
@@ -32,7 +32,7 @@ services:
       - ./:/app
       - /app/node_modules
     depends_on:
-      - backend-postgres-db
+      - backend_postgres_db
 
 volumes:
   backend_postgres_data:
