@@ -18,17 +18,22 @@ const buildServer = async () => {
         origin: ["*", "http://localhost:3000",],
         methods: ['GET', 'POST', 'PATCH', 'DELETE',],
         credentials: true
-    }).register(fastifyHelmet).register(fastifyRateLimit, {
+    })
+    .register(fastifyHelmet)
+    .register(fastifyRateLimit, {
         max: 10,
         timeWindow: 60000,  // 1 minute in milliseconds (60 * 1000)
         cache: 100,
         ban: 2,  // Ban IP for exceeding limit twice
-    }).register(fastifyJwt, {
+    })
+    .register(fastifyJwt, {
         secret: ENV.JWT_SECRET_KEY,
         sign: { expiresIn: ENV.JWT_EXPIRES_IN }
-    }).register(fastifyMultipart, {
+    })
+    .register(fastifyMultipart, {
         limits: { fileSize: FileConfig.MAX_FILE_SIZE, files: FileConfig.MAX_NO_OF_FILES, } // 10 MB limit
-    }).register(fastifyHealthcheck, {
+    })
+    .register(fastifyHealthcheck, {
         healthcheckUrl: '/health',
         exposeUptime: true,
         logLevel: 'info',
@@ -38,7 +43,8 @@ const buildServer = async () => {
             maxRssBytes: 300000000,  // bytes
             exposeStatusRoute: true  // Expose /status endpoint
         }
-    }).decorate('authenticate', authTokenMiddleware);
+    })
+    .decorate('authenticate', authTokenMiddleware);
 
     return app;
 };

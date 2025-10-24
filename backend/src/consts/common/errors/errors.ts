@@ -1,39 +1,40 @@
+import { FileConfig } from "../file";
 import { HttpStatus } from "../status";
 
 
 export type ErrorCodeValue = {
-    status: HttpStatus;
-    message: string;
+  status: HttpStatus;
+  message: string;
 };
 
 export const ErrorCodes = {
-    //#region Auth
-    AUTH001: {
-        status: HttpStatus.UNAUTHORIZED,
-        message: 'Email or password is incorrect',
-    },
-    AUTH002: {
-        status: HttpStatus.NOT_FOUND,
-        message: 'User does not exist. Please sign up.',
-    },
-    AUTH003: {
-        status: HttpStatus.CONFLICT,
-        message: 'Email is already registered',
-    },
-    AUTH004: {
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        message: 'Data is missing',
-    },
-    AUTH005: {
-        status: HttpStatus.UNAUTHORIZED,
-        message: 'Unauthorized access',
-    },
-    AUTH006: {
-        status: HttpStatus.UNPROCESSABLE_ENTITY,
-        message: 'Payload is invalid',
-    },
-    //#endregion Auth
-      //#region Database
+  //#region Auth
+  AUTH001: {
+    status: HttpStatus.UNAUTHORIZED,
+    message: 'Email or password is incorrect',
+  },
+  AUTH002: {
+    status: HttpStatus.NOT_FOUND,
+    message: 'User does not exist. Please sign up.',
+  },
+  AUTH003: {
+    status: HttpStatus.CONFLICT,
+    message: 'Email is already registered',
+  },
+  AUTH004: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Data is missing',
+  },
+  AUTH005: {
+    status: HttpStatus.UNAUTHORIZED,
+    message: 'Unauthorized access',
+  },
+  AUTH006: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Payload is invalid',
+  },
+  //#endregion Auth
+  //#region Database
   DB001: {
     status: HttpStatus.CONFLICT,
     message: 'The data with the same identifier already exists',
@@ -55,8 +56,25 @@ export const ErrorCodes = {
     message: 'Database unavailable',
   },
   //#endregion Database
-
-   //#region General
+  //#region File Upload
+  FILE001: {
+    status: HttpStatus.UNSUPPORTED_MEDIA_TYPE,
+    message: `Invalid file type. Only ${FileConfig.ALLOWED_FILE_TYPES.join(", ")} are allowed.`,
+  },
+  FILE002: {
+    status: HttpStatus.PAYLOAD_TOO_LARGE,
+    message: `File size exceeds ${FileConfig.MAX_FILE_SIZE / (1024 * 1024)} MB limit.`,
+  },
+  FILE003: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'File is required.',
+  },
+  FILE004: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Failed to create directory.',
+  },
+  //#endregion File Upload
+  //#region General
   GEN001: {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     message: 'Something went wrong! Please try after sometime',
@@ -86,6 +104,23 @@ export const ErrorCodes = {
     message: 'Invalid input data',
   },
   //#endregion General
- 
+  //#region Generation
+  GRT001: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Query is invalid',
+  },
+  GRT002: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'File is required',
+  },
+  GRT003: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Payload is invalid',
+  },
+  GRT004: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Failed to generate the image',
+  }
+  //#endregion Generation
 }
 export type ErrorCode = keyof typeof ErrorCodes;

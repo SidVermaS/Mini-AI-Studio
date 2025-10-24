@@ -10,7 +10,7 @@ export const authRoutes = (app: FastifyInstance) => {
         if (bodyError) {
             throw new AppError('AUTH006', bodyError);
         }
-        const result = await AuthModule.CoreAuthModule.register(bodyData);
+        const result = await AuthModule.register(bodyData);
         return reply.status(HttpStatus.CREATED).send(result);
     });
     app.post('/api/v1/login', async (request, reply) => {
@@ -18,7 +18,7 @@ export const authRoutes = (app: FastifyInstance) => {
         if (bodyError) {
             throw new AppError('AUTH006', bodyError);
         }
-        const result = await AuthModule.CoreAuthModule.login(app.jwt, bodyData);
+        const result = await AuthModule.login(app.jwt, bodyData);
         return reply.status(HttpStatus.OK).send(result);
     });
 }

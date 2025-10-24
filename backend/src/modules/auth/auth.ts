@@ -5,7 +5,7 @@ import { comparePassword, hashPassword } from "@utils/auth";
 import { AppError } from "errors/index";
 import type { User } from "generated/prisma";
 import { JWT } from "@fastify/jwt";
-export const CoreAuthModule = {
+export const AuthModule = {
     register: async ({ email, password, name }: AuthRegister): Promise<Pick<User, 'id'>> => {
         // Registration logic here
         const userExists = await UserModule.CoreUserModule.exists({ email });

@@ -12,3 +12,15 @@
    ```
 
 ## Frontend
+
+
+
+
+
+##### Handy Commands
+###### Backend
+```bash
+œ
+docker compose -f docker-compose-local.yaml --env-file .env.local up --build
+npm run generate
+```
