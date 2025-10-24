@@ -17,6 +17,8 @@
       "@classes/*": ["classes/*"],
       "@config/*": ["config/*"],
       "@consts/*": ["consts/*"],
+      "@errors/*": ["errors/*"],
+      "@generated/*": ["generated/*"],
       "@interfaces/*": ["interfaces/*"],
       "@middlewares/*": ["middlewares/*"],
       "@modules/*": ["modules/*"],

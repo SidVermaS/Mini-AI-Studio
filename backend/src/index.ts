@@ -7,6 +7,8 @@ import fastifyHelmet from '@fastify/helmet';
 import { fastifyRateLimit } from '@fastify/rate-limit';
 import fastifyMultipart from '@fastify/multipart';
 import fastifyHealthcheck from 'fastify-healthcheck';
+import fastifyJwt from '@fastify/jwt';
+import { authTokenMiddleware } from '@middlewares/auth';
 
 const buildServer = async () => {
     const app = Fastify({ logger: ENV.NODE_ENV !== 'production', ignoreTrailingSlash: true, trustProxy: true });
@@ -21,6 +23,9 @@ const buildServer = async () => {
         timeWindow: 60000,  // 1 minute in milliseconds (60 * 1000)
         cache: 100,
         ban: 2,  // Ban IP for exceeding limit twice
+    }).register(fastifyJwt, {
+        secret: ENV.JWT_SECRET_KEY,
+        sign: { expiresIn: ENV.JWT_EXPIRES_IN }
     }).register(fastifyMultipart, {
         limits: { fileSize: FileConfig.MAX_FILE_SIZE, files: FileConfig.MAX_NO_OF_FILES, } // 10 MB limit
     }).register(fastifyHealthcheck, {
@@ -33,7 +38,7 @@ const buildServer = async () => {
             maxRssBytes: 300000000,  // bytes
             exposeStatusRoute: true  // Expose /status endpoint
         }
-    })
+    }).decorate('authenticate', authTokenMiddleware);
 
     return app;
 };

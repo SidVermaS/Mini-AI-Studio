@@ -24,6 +24,14 @@ export const ErrorCodes = {
         status: HttpStatus.UNPROCESSABLE_ENTITY,
         message: 'Data is missing',
     },
+    AUTH005: {
+        status: HttpStatus.UNAUTHORIZED,
+        message: 'Unauthorized access',
+    },
+    AUTH006: {
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        message: 'Payload is invalid',
+    },
     //#endregion Auth
       //#region Database
   DB001: {
@@ -47,5 +55,37 @@ export const ErrorCodes = {
     message: 'Database unavailable',
   },
   //#endregion Database
+
+   //#region General
+  GEN001: {
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    message: 'Something went wrong! Please try after sometime',
+  },
+  GEN002: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Invalid payload',
+  },
+  GEN003: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Payload is empty',
+  },
+  GEN004: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Invalid parameter',
+  },
+  GEN005: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Invalid query',
+  },
+  GEN006: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Invalid data',
+  },
+  GEN007: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'Invalid input data',
+  },
+  //#endregion General
+ 
 }
 export type ErrorCode = keyof typeof ErrorCodes;

@@ -1,5 +1,5 @@
 import { PrismaAppError, PrismaErrorCodes } from "@consts/index";
-import AppError from "errors/AppError";
+import {AppError} from "errors/index";
 import { Prisma } from "generated/prisma";
 
 export const errorHandler = (error: unknown, mappedError?: PrismaAppError) => {

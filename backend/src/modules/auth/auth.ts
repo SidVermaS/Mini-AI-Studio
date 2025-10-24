@@ -1,13 +1,43 @@
-import { AuthRegister } from "@schemas/index";
-
+import { prismaPg } from "@config/db";
+import { UserModule } from "@modules/user";
+import { AuthLogin, AuthRegister } from "@schemas/index";
+import { comparePassword, hashPassword } from "@utils/auth";
+import { AppError } from "errors/index";
+import type { User } from "generated/prisma";
+import { JWT } from "@fastify/jwt";
 export const CoreAuthModule = {
-    
-    register:async({email,password,name}:AuthRegister)=>{
+    register: async ({ email, password, name }: AuthRegister): Promise<Pick<User, 'id'>> => {
         // Registration logic here
-        const userExists = await CoreUserModule.exists({ email });
+        const userExists = await UserModule.CoreUserModule.exists({ email });
         if (userExists) {
-            throw new Error("User already exists");
+            throw new AppError('AUTH003');
         }
-        // Create user
+        const hashedPassword = await hashPassword(password);
+
+        // Create user with hashed password
+        const user = await prismaPg.user.create({
+            select: { id: true },
+            data: {
+                email,
+                password: hashedPassword,
+                name,
+            },
+        });
+        return user;
+    },
+    login: async (jwt: JWT, { email, password }: AuthLogin): Promise<Pick<User, 'id' | 'name' | 'email'> & { token: string }> => {
+        const user = await prismaPg.user.findUnique({
+            where: { email },
+            select: { id: true, password: true, name: true, email: true },
+        });
+        if (!user) {
+            throw new AppError('AUTH002');
+        }
+        const isPasswordValid = await comparePassword(user.password, password);
+        if (!isPasswordValid) {
+            throw new AppError('AUTH001');
+        }
+        const token = jwt.sign({ id: user.id });
+        return { id: user.id, name: user.name, email: user.email, token};
     }
 }

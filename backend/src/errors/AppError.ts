@@ -4,7 +4,7 @@ import type {AppErrorJSON, } from "@interfaces/index";
 import { ObjUnknown } from "@interfaces/index";
 import { ZodError } from "zod";
 
-export default class AppError {
+export  class AppError {
   private _status: HttpStatus;
   private _errorCode: ErrorCode;
   private _message: string;
