@@ -120,7 +120,17 @@ export const ErrorCodes = {
   GRT004: {
     status: HttpStatus.UNPROCESSABLE_ENTITY,
     message: 'Failed to generate the image',
-  }
+  },
   //#endregion Generation
+  //#region User
+  USER001: {
+    status: HttpStatus.NOT_FOUND,
+    message: 'User not found',
+  },
+  USER002: {
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    message: 'id is invalid',
+  },
+  //#endregion User
 }
 export type ErrorCode = keyof typeof ErrorCodes;

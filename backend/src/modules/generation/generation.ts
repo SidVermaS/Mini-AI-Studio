@@ -1,6 +1,6 @@
 import { prismaPg } from "@config/db";
 import { AppError } from "@errors/AppError";
-import { Multipart, MultipartFile } from "@fastify/multipart";
+import {  MultipartFile } from "@fastify/multipart";
 import { Generation, Prisma, User } from "@generated/prisma";
 import { CursorData } from "@interfaces/index";
 import { CursorPagination, GenerationCreate, } from "@schemas/index";

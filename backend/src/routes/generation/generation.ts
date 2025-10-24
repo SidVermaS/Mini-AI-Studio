@@ -3,7 +3,6 @@ import { AppError } from "@errors/index";
 import { GenerationModule } from "@modules/index";
 import { CursorPaginationSchema } from "@schemas/common";
 import { GenerationCreateSchema } from "@schemas/index";
-import { validateFile } from "@utils/data/file";
 import type { FastifyInstance } from "fastify";
 
 export const generationRoutes = (app: FastifyInstance) => {

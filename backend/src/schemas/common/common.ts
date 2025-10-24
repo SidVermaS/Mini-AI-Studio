@@ -21,3 +21,11 @@ export const CursorPaginationSchema = z.object({
     }),
 });
 export type CursorPagination = z.infer<typeof CursorPaginationSchema>;
+
+export const UUIDSchema = z.uuid();
+export type UUID = z.infer<typeof UUIDSchema>;
+
+export const RouteParamSchema = z.object({
+  id: UUIDSchema,
+});
+export type RouteParam = z.infer<typeof RouteParamSchema>;
