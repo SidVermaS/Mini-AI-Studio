@@ -20,7 +20,8 @@
 ##### Handy Commands
 ###### Backend
 ```bash
-œ
+docker compose -f docker-compose-local.yaml --env-file .env.local down
 docker compose -f docker-compose-local.yaml --env-file .env.local up --build
+docker compose -f docker-compose-local.yaml --env-file .env.local up --build --force-recreate
 npm run generate
 ```
