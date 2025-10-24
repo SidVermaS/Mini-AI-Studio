@@ -5,11 +5,12 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start": "node ./dist/index.js",
-    "dev": "ts-node-dev --respawn --transpile-only --require tsconfig-paths/register --watch src",
+    "dev": "ts-node-dev --respawn --transpile-only --require tsconfig-paths/register --watch src src/index.ts",
     "lint": "eslint . --ext .ts --ignore-pattern dist/",
     "lint:fix": "eslint . --ext .ts --ignore-pattern dist/ --fix",
     "fmt": "prettier --write . && npm run fmt:all",
     "migrate": "prisma migrate dev --name init",
+    "deploy": "prisma migrate deploy",
     "generate": "cp .env.local .env && prisma generate"
   },
   "keywords": [],
@@ -22,9 +23,10 @@
     "@fastify/jwt": "^10.0.0",
     "@fastify/multipart": "^9.2.1",
     "@fastify/rate-limit": "^10.3.0",
+    "@fastify/under-pressure": "^9.0.3",
+    "fastify-healthcheck": "^5.1.0",
     "@prisma/client": "^6.18.0",
     "fastify": "^5.6.1",
-    "fastify-healthcheck": "^4.4.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
@@ -32,6 +34,7 @@
     "dotenv": "^17.2.3",
     "prisma": "^6.18.0",
     "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.3"
   }
 }

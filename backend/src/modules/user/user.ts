@@ -1,13 +1,11 @@
 import { prismaPg } from "@config/db";
-import { Email } from "@interfaces/index";
+import { Prisma } from "generated/prisma";
 
 export const CoreUserModule = {
-    exists: async (email: Email) => {
-        // Check if user exists logic here
-        const user = await prismaPg.user.count({
-            
-            where: { email },
+    exists: async (filters: Prisma.UserWhereInput) => {
+        const userCount = await prismaPg.user.count({
+            where: filters,
         });
-        return user > 0;
+        return userCount > 0;
     }
 }

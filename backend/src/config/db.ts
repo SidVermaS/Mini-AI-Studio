@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-import { log } from "console";
+import { PrismaClient } from "../generated/prisma/client";
 
 export const prismaPg = new PrismaClient({
     // log: ["query", "info", "warn", "error"],

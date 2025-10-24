@@ -11,7 +11,7 @@ ARG RUNTIME_IMAGE=node:22-alpine
 FROM $DEPS_IMAGE AS deps
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY prisma ./prisma
 RUN npx prisma generate
 ###########################
@@ -38,8 +38,7 @@ COPY --from=deps /app/package*.json ./
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/prisma ./prisma
 COPY --from=builder /app/dist ./dist
-RUN npm ci --only=production && npm cache clean --force
 EXPOSE 4000
 # CMD ["sh", "-c", "npm run migrate && npm run seed && npm run dev"]
-CMD ["sh", "-c", "npm run migrate && npm run dev"]
+CMD ["sh", "-c", "npm run deploy && npm run dev"]
 ###########################
