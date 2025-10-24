@@ -49,19 +49,19 @@ export const GenerationModule = {
                 status: 'PROCESSING',
             }
         });
-        let input: Prisma.GenerationUpdateInput = {}
+        const inputForInputImageUrl: Prisma.GenerationUpdateInput = {}
         try {
             const inputFilePath = await saveFile({ file: file!, subPath: 'uploads' });
-            input.inputImageUrl = inputFilePath;
+            inputForInputImageUrl.inputImageUrl = inputFilePath;
         } catch (_error) {
-            input.status = 'FAILED';
+            inputForInputImageUrl.status = 'FAILED';
         }
         generationResult = await prismaPg.generation.update({
             where: { id: generationResult.id },
-            data: input,
+            data: inputForInputImageUrl,
             select: { id: true, },
         });
-        if (input.status === 'FAILED') {
+        if (inputForInputImageUrl.status === 'FAILED') {
             return {
                 id: generationResult.id,
                 inputImageUrl: null,
@@ -69,33 +69,32 @@ export const GenerationModule = {
                 outputImageUrl: null,
             }
         }
-        // Reset input
-        input = {}
+        const inputForOutputImageUrl: Prisma.GenerationUpdateInput = {}
         try {
             const outputImagePath = await GenerationModule.simulateImageGeneration(file!);
-            input.outputImageUrl = outputImagePath;
-            input.status = 'COMPLETED';
+            inputForOutputImageUrl.outputImageUrl = outputImagePath;
+            inputForOutputImageUrl.status = 'COMPLETED';
         } catch (_error) {
-            input.status = 'FAILED';
+            inputForOutputImageUrl.status = 'FAILED';
         }
         generationResult = await prismaPg.generation.update({
             where: { id: generationResult.id },
-            data: input,
+            data: inputForOutputImageUrl,
             select: { id: true, },
         });
-       if (input.status === 'FAILED') {    
+       if (inputForOutputImageUrl.status === 'FAILED') {
             return {
                 id: generationResult.id,
-                inputImageUrl: generationResult.inputImageUrl,
+                inputImageUrl: String(inputForInputImageUrl.inputImageUrl),
                 status: 'FAILED',
                 outputImageUrl: null,
             }
        }
         return {
             id: generationResult.id,
-            inputImageUrl: generationResult.inputImageUrl,
+            inputImageUrl: String(inputForInputImageUrl.inputImageUrl),
             status: 'COMPLETED',
-            outputImageUrl: generationResult.outputImageUrl,
+            outputImageUrl: String(inputForOutputImageUrl.outputImageUrl),
         }
     },
     simulateImageGeneration: async (file: MultipartFile): Promise<string> => {

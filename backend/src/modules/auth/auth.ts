@@ -8,7 +8,7 @@ import { JWT } from "@fastify/jwt";
 export const AuthModule = {
     register: async ({ email, password, name }: AuthRegister): Promise<Pick<User, 'id'>> => {
         // Registration logic here
-        const userExists = await UserModule.CoreUserModule.exists({ email });
+        const userExists = await UserModule.exists({ email });
         if (userExists) {
             throw new AppError('AUTH003');
         }
