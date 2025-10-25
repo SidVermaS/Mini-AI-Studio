@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Light mode variables */
+    --bg-primary: #f5f5f7;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f9fafb;
+    --text-primary: #000;
+    --text-primary-hover: #000;
+    --text-secondary: #5e5b5b;
+    --text-secondary-hover: #a64ef3;
+    --text-tertiary: #a64ef3;
+    --border-primary: #d1d5dc;
+    --border-primary-hover: #a64ef3;
+  }
+  .dark {
+    /* Dark mode variables */
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #1e293b;
+    --text-primary: #304458;
+    --text-primary-hover: #000;
+    --text-secondary: #94a3b8;
+    --text-secondary-hover: #c27aff;
+    --text-tertiary: #dee9f5;
+    --border-primary: #d1d5dc;
+    --border-primary-hover: #c27aff;
+  }
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s, color 0.3s;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+}
+
+@layer utilities {
+  .bg-var-primary {
+    background-color: var(--bg-primary);
+  }
+  .bg-var-secondary {
+    background-color: var(--bg-secondary);
+  }
+  .bg-var-tertiary {
+    background-color: var(--bg-tertiary);
+  }
+
+  .text-var-primary {
+    color: var(--text-primary);
+  }
+  .text-var-primary-hover {
+    color: var(--text-primary-hover);
+  }
+  .text-var-secondary {
+    color: var(--text-secondary);
+  }
+  .text-var-tertiary {
+    color: var(--text-tertiary);
+  }
+  .hover\:text-var-secondary-hover:hover {
+    color: var(--text-secondary-hover);
+  }
+  .border-var-tertiary {
+    border-color: var(--bg-tertiary);
+  }
+  .border-var-primary {
+    border-color: var(--border-primary);
+  }
+  .hover\:border-var-primary-hover:hover {
+    border-color: var(--border-primary-hover);
+  }
+}

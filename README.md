@@ -1,3 +1,17 @@
+# Mini AI Studio
+
+A full-stack web application for simulating AI-powered image generation.
+
+## Tech Stack
+
+- **Frontend**: Next.js 15
+- **Backend**: Node.js Fastify
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Authentication**: JWT
+- **Styling**: Tailwind CSS
+- **Containerization**: Docker
+
 ## Backend
 ### Local Setup
 1. Create a `.env.local` file in the `backend` directory based on the `.env.example` file.
