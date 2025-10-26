@@ -1,19 +1,19 @@
-import { ObjStr, ObjUnknown } from "@/types";
+import { ObjStr, ObjUnknown, StringNumber } from "@/types";
 
 export type GenerateURL = {
   baseUrl: string;
   path: string;
   query?: ObjUnknown;
-  routeId?: string | number;
+  routeId?: StringNumber;
 };
 
-
-export interface APICall<PayloadT = unknown> {
+export interface APICall<Payload = unknown> {
   baseUrl?: string;
-  payload?: PayloadT;
+  payload?: Payload;
   query?: ObjUnknown;
-  routeId?: string | number;
+  routeId?: StringNumber;
   isAuth?: boolean;
+  isFormData?: boolean;
   headers?: ObjStr;
 }
 

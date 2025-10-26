@@ -9,6 +9,7 @@ import fastifyMultipart from '@fastify/multipart';
 import fastifyHealthcheck from 'fastify-healthcheck';
 import fastifyJwt from '@fastify/jwt';
 import { authTokenMiddleware } from '@middlewares/auth';
+import routes from './routes';
 
 const buildServer = async () => {
     const app = Fastify({ logger: ENV.NODE_ENV !== 'production', ignoreTrailingSlash: true, trustProxy: true });
@@ -44,6 +45,7 @@ const buildServer = async () => {
             exposeStatusRoute: true  // Expose /status endpoint
         }
     })
+    .register(routes)
     .decorate('authenticate', authTokenMiddleware);
 
     return app;

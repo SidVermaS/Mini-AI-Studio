@@ -1,10 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
-const GenerationForm = () => {
+import Label from "@/components/Label";
+import { ClassName } from "@/types";
+import { createGeneration } from "@/lib";
+
+export type GenerationFormProps = { className?: ClassName };
+const GenerationForm = ({ className }: GenerationFormProps) => {
   const inputFileRef = React.useRef<HTMLInputElement | null>(null);
   const [image, setImage] = useState<File | null>(null);
-  const [prompt, setPrompt] = useState("");
+  const [prompt, setPrompt] = useState<string>("");
   const [preview, setPreview] = useState<string | null>(null);
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -22,14 +27,29 @@ const GenerationForm = () => {
       inputFileRef.current?.click();
     }
   };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    if (image && prompt.trim().length > 1) {
+      try {
+        // Call the API to create a new generation
+        const _result = await createGeneration({ prompt, file: image });
+      } catch (_error) {
+        //
+      }
+    }
+  };
+  const isEnabled = !!image && prompt.trim().length > 1;
   return (
-    <div className="bg-var-secondary rounded-xl shadow-lg px-6 py-5 flex-1">
-      <h2 className="text-[16px] font-medium">Generate Image</h2>
-      <form>
+    <div
+      className={`bg-var-secondary rounded-xl shadow-lg px-6 py-5  ${className}`}
+    >
+      <form onSubmit={handleSubmit}>
+        <Label htmlFor="image_file" className="" text="Upload Image" />
         <div
-          className={`border-2 border-dashed border-gray-300 rounded-lg p-6 text-center ${
+          className={`border-2 border-dashed border-var-primary  rounded-lg p-6 text-center ${
             !preview ? "hover:border-var-primary-hover" : ""
-          } transition-colors w-full h-72 flex justify-center items-center mt-3`}
+          } transition-colors w-full h-72 flex justify-center items-center mt-2`}
           onClick={handleFileBoxClick}
         >
           {preview ? (
@@ -65,7 +85,7 @@ const GenerationForm = () => {
               />
               <label
                 htmlFor="image-upload"
-                className="cursor-pointer text-purple-600 hover:text-purple-700 font-medium"
+                className="cursor-pointer text-[16px] text-var-tertiary hover:text-var-tertiary-hover font-medium"
               >
                 Upload image
               </label>
@@ -75,16 +95,23 @@ const GenerationForm = () => {
             </div>
           )}
         </div>
+        <Label htmlFor="prompt" className="mt-7" text="Enter Prompt" />
         <textarea
-          className="w-full mt-4 p-3 border border-gray-300 outline-none rounded-lg focus:outline-none focus:ring-2 focus:ring-var-primary"
+          className="w-full mt-2 p-3 border rounded-lg border-var-primary focus:outline-none text-var-primary text-sm"
           rows={4}
           placeholder="Enter your prompt..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
         <button
+          disabled={!isEnabled}
+          onSubmit={handleSubmit}
           type="submit"
-          className="mt-4 w-full bg-var-primary text-gray-400 py-3 rounded-lg hover:bg-var-primary-hover transition-colors"
+          className={`mt-4 w-full py-3 rounded-lg transition-colors ${
+            isEnabled
+              ? "button-var-primary  hover:button-var-primary-hover"
+              : "button-var-primary-disabled"
+          }`}
         >
           Generate
         </button>

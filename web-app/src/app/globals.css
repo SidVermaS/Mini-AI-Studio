@@ -11,8 +11,17 @@
     --text-secondary: #5e5b5b;
     --text-secondary-hover: #a64ef3;
     --text-tertiary: #a64ef3;
+    --text-tertiary-hover: #8200db;
     --border-primary: #d1d5dc;
     --border-primary-hover: #a64ef3;
+    --border-secondary: #d1d5dc;
+    --border-tertiary: #d1d5dc;
+    --button-primary: #a64ef3;
+    --button-text-primary: #ffffff;
+    --button-text-primary-hover: #ffffff;
+    --button-primary-disabled: #b679eb;
+    --button-text-primary-disabled: #e4d9d9;
+    --button-primary-hover: rgb(150, 51, 236);
   }
   .dark {
     /* Dark mode variables */
@@ -23,9 +32,12 @@
     --text-primary-hover: #000;
     --text-secondary: #94a3b8;
     --text-secondary-hover: #c27aff;
-    --text-tertiary: #dee9f5;
+    --text-tertiary: #a64ef3;
+    --text-tertiary-hover: #8200db;
     --border-primary: #d1d5dc;
-    --border-primary-hover: #c27aff;
+    --border-primary-hover: #b472ee;
+    --border-secondary: #d1d5dc;
+    --border-tertiary: #d1d5dc;
   }
   body {
     background-color: var(--bg-primary);
@@ -55,19 +67,40 @@
   .text-var-secondary {
     color: var(--text-secondary);
   }
-  .text-var-tertiary {
-    color: var(--text-tertiary);
-  }
   .hover\:text-var-secondary-hover:hover {
     color: var(--text-secondary-hover);
   }
-  .border-var-tertiary {
-    border-color: var(--bg-tertiary);
+  .text-var-tertiary {
+    color: var(--text-tertiary);
   }
+  .hover\:text-var-tertiary-hover:hover {
+    color: var(--text-tertiary-hover);
+  }
+
   .border-var-primary {
     border-color: var(--border-primary);
   }
   .hover\:border-var-primary-hover:hover {
     border-color: var(--border-primary-hover);
+  }
+  .border-var-secondary {
+    border-color: var(--border-secondary);
+  }
+  .border-var-tertiary {
+    border-color: var(--border-tertiary);
+  }
+  .button-var-primary {
+    background-color: var(--button-primary);
+    color: var(--button-text-primary);
+  }
+  .button-var-primary-disabled {
+    background-color: var(--button-primary-disabled);
+    color: var(--button-text-primary-disabled);
+    cursor: not-allowed; 
+  }
+  .hover\:button-var-primary-hover:hover {
+    background-color: var(--button-primary-hover);
+    color: var(--button-text-primary-hover);
+    
   }
 }

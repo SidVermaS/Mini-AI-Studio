@@ -10,7 +10,7 @@ import { FastifyRequest } from "fastify";
 import { stat } from "fs";
 
 export const GenerationModule = {
-    fetch: async (request: FastifyRequest, { cursorId, pageSize }: CursorPagination): Promise<CursorData<Generation>> => {
+    fetch: async (request: FastifyRequest, { cursorId, pageSize }: CursorPagination): Promise<CursorData<Pick<Generation, 'id' | 'inputImageUrl' | 'outputImageUrl' | 'status' | 'prompt' | 'cursorId' | 'createdAt'>>> => {
         const user = request.user as User;
         const filters: Prisma.GenerationWhereInput = {
             userId: user.id,
@@ -23,6 +23,7 @@ export const GenerationModule = {
             }
         }
         const generations = await prismaPg.generation.findMany({
+            select: {   id: true, inputImageUrl: true, outputImageUrl: true, status: true, prompt: true, cursorId: true, createdAt: true },
             where: filters,
             take: pageSize + 1,
             orderBy: {

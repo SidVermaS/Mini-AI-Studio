@@ -1,21 +1,26 @@
-'use client';
+"use client";
 
-import { Generation } from '@/types';
+import { ClassName, Generation } from "@/types";
 
 interface GenerationsListProps {
-  generations: Generation[];
-  isLoading: boolean;
+  generations?: Generation[];
+  isLoading?: boolean;
+  className?: ClassName;
 }
 
-export function GenerationsList({ generations, isLoading }: GenerationsListProps) {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+export function GenerationsList({
+  generations = [],
+  isLoading,
+  className,
+}: GenerationsListProps) {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
 
   const getStatusBadge = (status: string) => {
     const badges = {
-      PENDING: 'bg-yellow-100 text-yellow-800',
-      PROCESSING: 'bg-blue-100 text-blue-800',
-      COMPLETED: 'bg-green-100 text-green-800',
-      FAILED: 'bg-red-100 text-red-800',
+      PENDING: "bg-yellow-100 text-yellow-800",
+      PROCESSING: "bg-blue-100 text-blue-800",
+      COMPLETED: "bg-green-100 text-green-800",
+      FAILED: "bg-red-100 text-red-800",
     };
     return badges[status as keyof typeof badges] || badges.PENDING;
   };
@@ -34,7 +39,7 @@ export function GenerationsList({ generations, isLoading }: GenerationsListProps
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6">
+    <div className={`bg-white rounded-xl shadow-lg p-6   ${className}`}>
       <h2 className="text-xl font-semibold mb-6 text-gray-900">
         Recent Generations
         <span className="text-sm text-gray-500 ml-2">(Last 5)</span>
@@ -55,7 +60,9 @@ export function GenerationsList({ generations, isLoading }: GenerationsListProps
               {/* Status Badge */}
               <div className="flex justify-between items-start mb-3">
                 <span
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(gen.status)}`}
+                  className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(
+                    gen.status
+                  )}`}
                 >
                   {gen.status}
                 </span>
@@ -76,13 +83,13 @@ export function GenerationsList({ generations, isLoading }: GenerationsListProps
                 </div>
                 <div>
                   <p className="text-xs text-gray-600 mb-1">Result</p>
-                  {gen.status === 'COMPLETED' && gen.resultImageUrl ? (
+                  {gen.status === "COMPLETED" && gen.resultImageUrl ? (
                     <img
                       src={`${gen.resultImageUrl}`}
                       alt="Result"
                       className="w-full h-32 object-cover rounded"
                     />
-                  ) : gen.status === 'FAILED' ? (
+                  ) : gen.status === "FAILED" ? (
                     <div className="w-full h-32 bg-red-50 rounded flex items-center justify-center">
                       <span className="text-red-600 text-sm">❌ Failed</span>
                     </div>
@@ -100,7 +107,7 @@ export function GenerationsList({ generations, isLoading }: GenerationsListProps
               </p>
 
               {/* Error Message */}
-              {gen.status === 'FAILED' && gen.errorMessage && (
+              {gen.status === "FAILED" && gen.errorMessage && (
                 <div className="bg-red-50 border-l-4 border-red-500 p-3 mt-2">
                   <p className="text-xs text-red-700">
                     <strong>Error:</strong> {gen.errorMessage}
