@@ -1,5 +1,4 @@
 import { ClassName } from "@/types";
-import HistoryOutlined from "@ant-design/icons/lib/icons/HistoryOutlined";
 
 export type NavOptionProps = {
   className?: ClassName;

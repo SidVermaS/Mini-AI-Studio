@@ -6,10 +6,12 @@ import {
   useState,
   useEffect,
   ReactNode,
+  use,
+  useRef,
 } from "react";
 import { login as loginAPI } from "@/lib";
-import { useRouter } from "next/navigation";
-import { AuthLoginPayload, AuthLoginResponse, VoidFn } from "@/types";
+import { usePathname, useRouter } from "next/navigation";
+import { AuthLoginPayload, AuthLoginResponse, Nullable, VoidFn } from "@/types";
 import { getCookie, removeCookie, setCookie } from "@/utils";
 import { useUserStore } from "@/stores";
 
@@ -20,8 +22,9 @@ interface User {
 }
 
 interface AuthContextType {
-  user: User | null;
+  user: Nullable<User>;
   isLoading: boolean;
+  isAuthenticated: boolean;
   login: (payload: AuthLoginPayload) => Promise<void>;
   logout: VoidFn;
 }
@@ -29,8 +32,10 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const isAuthenticated = useRef<boolean>(false);
   const { user, setUser, clearUser } = useUserStore();
   const router = useRouter();
+  const pathname = usePathname(); // Get current path
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const login = async (payload: AuthLoginPayload): Promise<void> => {
@@ -39,6 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response: AuthLoginResponse = await loginAPI(payload);
       setUser(response.user);
       setCookie("token", response.token);
+      isAuthenticated.current = true;
       router.push("/");
     } catch (_error) {
       //
@@ -49,11 +55,35 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     removeCookie("token");
     clearUser();
-    router.push("/login");
+    router.push("/loin");
   };
 
+  useEffect(() => {
+    const token = getCookie("token");
+    const isAuthPage = new Set(["/login", "/register"]).has(pathname);
+    if (token) {
+      isAuthenticated.current = true;
+      if (isAuthPage) {
+        router.push("/");
+      }
+    } else {
+      isAuthenticated.current = false;
+      if (!isAuthPage) {
+        router.push("/login");
+      }
+    }
+  }, [pathname]);
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated: isAuthenticated.current,
+        isLoading,
+        login,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

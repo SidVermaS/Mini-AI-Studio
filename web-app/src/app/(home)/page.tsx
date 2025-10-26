@@ -3,9 +3,7 @@ import GenerationForm from "./components/GenerationForm";
 
 
 export default function HomePage() {
-  const handleGenerationCreated = () => {
-    // Handle the event when a generation is created
-  };
+ 
   return (
       <div className=" bg-var-primary h-screen flex justify-center items-center px-10 pt-30 mb-30">
         <div className=" w-full flex flex-col gap-10">

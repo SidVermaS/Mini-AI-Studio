@@ -1,0 +1,1 @@
+export const NameRx = /^[a-zA-Z\s]+$/;

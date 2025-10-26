@@ -14,6 +14,7 @@
     --text-tertiary-hover: #8200db;
     --border-primary: #d1d5dc;
     --border-primary-hover: #a64ef3;
+    --border-primary-focus: #a64ef3;
     --border-secondary: #d1d5dc;
     --border-tertiary: #d1d5dc;
     --button-primary: #a64ef3;
@@ -83,6 +84,9 @@
   .hover\:border-var-primary-hover:hover {
     border-color: var(--border-primary-hover);
   }
+  .border-var-primary-focus:focus {
+    border-color: var(--border-primary-focus);
+  }
   .border-var-secondary {
     border-color: var(--border-secondary);
   }
@@ -100,7 +104,6 @@
   }
   .hover\:button-var-primary-hover:hover {
     background-color: var(--button-primary-hover);
-    color: var(--button-text-primary-hover);
-    
+    color: var(--button-text-primary-hover); 
   }
 }

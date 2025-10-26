@@ -25,7 +25,7 @@ export const AuthModule = {
         });
         return user;
     },
-    login: async (jwt: JWT, { email, password }: AuthLogin): Promise<Pick<User, 'id' | 'name' | 'email'> & { token: string }> => {
+    login: async (jwt: JWT, { email, password }: AuthLogin): Promise<  {user:Pick<User, 'id' | 'name' | 'email'>, token: string }> => {
         const user = await prismaPg.user.findUnique({
             where: { email },
             select: { id: true, password: true, name: true, email: true },
@@ -38,6 +38,6 @@ export const AuthModule = {
             throw new AppError('AUTH001');
         }
         const token = jwt.sign({ id: user.id });
-        return { id: user.id, name: user.name, email: user.email, token};
+        return { user: { id: user.id, name: user.name, email: user.email }, token };
     }
 }

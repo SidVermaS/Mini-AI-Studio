@@ -1,7 +1,7 @@
 import { apiCall } from "@/config";
 import type{ CursorData, CursorPagination, Generation, GenerationCreate, GenerationCreateResponse } from "@/types";
 
-export const fetchGeneration = async (query:CursorPagination)=>await apiCall<CursorPagination, CursorData<Generation>>(
+export const fetchGenerations = async (query:CursorPagination)=>await apiCall<CursorPagination, CursorData<Generation>>(
     '/api/v1/generation',
     'GET',
     {
