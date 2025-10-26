@@ -22,8 +22,10 @@ export const validateFile = (file: Undefined<MultipartFile>): void => {
 export const saveFile = async ({ file, subPath }: { file: MultipartFile, subPath: 'uploads' | 'output' }): Promise<any> => {
     const buffer = await file.toBuffer();
     const fileName = `${crypto.randomUUID()}.${file.mimetype.split('/')[1]}`;
-    const imagePath = join(__dirname, 'storage',subPath, fileName);
-    await mkdir(join(__dirname, 'storage', subPath), { recursive: true }, (err) => {
+    
+    const storageDir = join('storage', subPath);
+    const imagePath = join(storageDir, fileName);
+    await mkdir(storageDir, { recursive: true }, (err) => {
         if (err) {
             throw new AppError("FILE004");
         }

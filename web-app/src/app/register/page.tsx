@@ -20,7 +20,6 @@ export default function RegisterPage() {
     resolver: zodResolver(AuthRegisterSchema),
   });
   const onSubmit = async (data: AuthRegister) => {
-    console.log("1 onSubmit", data);
 
     try {
       const _result=await registerAPI(data);

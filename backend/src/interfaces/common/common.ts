@@ -1,4 +1,5 @@
 export type ObjUnknown = Record<string, unknown>;
+export type ObjAny = Record<string, any>;
 export type Nullable<T> = T | null;
 export type Undefined<T> = T | undefined ;
 export type UndefinedNullable<T> = T | undefined | null;

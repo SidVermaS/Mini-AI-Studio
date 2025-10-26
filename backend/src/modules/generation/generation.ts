@@ -16,8 +16,6 @@ export const GenerationModule = {
             userId: user.id,
         };
         if (cursorId) {
-            console.log(cursorId);
-
             filters.cursorId = {
                 lt: cursorId
             }
@@ -38,9 +36,7 @@ export const GenerationModule = {
                 result?.[result.length - 1]?.cursorId || null
         }
     },
-    create: async (request: FastifyRequest, { prompt }: GenerationCreate): Promise<Pick<Generation, 'id' | 'cursorId' | 'inputImageUrl' | 'status' | 'outputImageUrl' | 'createdAt'>> => {
-        const file = await request.file();
-        validateFile(file);
+    create: async (request: FastifyRequest, { prompt }: GenerationCreate, file: MultipartFile): Promise<Pick<Generation, 'id' | 'cursorId' | 'inputImageUrl' | 'status' | 'outputImageUrl' | 'createdAt'>> => {
         const user = request.user as User;
         const generationResult = await prismaPg.generation.create({
             select: { id: true, cursorId: true, createdAt: true },
@@ -53,7 +49,7 @@ export const GenerationModule = {
         const inputForInputImageUrl: Prisma.GenerationUpdateInput = {}
         try {
             const inputFilePath = await saveFile({ file: file!, subPath: 'uploads' });
-            inputForInputImageUrl.inputImageUrl = inputFilePath;
+            inputForInputImageUrl.inputImageUrl = `/${inputFilePath}`;
         } catch (_error) {
             inputForInputImageUrl.status = 'FAILED';
         }
@@ -75,7 +71,7 @@ export const GenerationModule = {
         const inputForOutputImageUrl: Prisma.GenerationUpdateInput = {}
         try {
             const outputImagePath = await GenerationModule.simulateImageGeneration(file!);
-            inputForOutputImageUrl.outputImageUrl = outputImagePath;
+            inputForOutputImageUrl.outputImageUrl = `/${outputImagePath}`;
             inputForOutputImageUrl.status = 'COMPLETED';
         } catch (_error) {
             inputForOutputImageUrl.status = 'FAILED';

@@ -1,5 +1,5 @@
 import { fetchGenerations } from '@/lib';
-import { Generation, NumberNull } from '@/types';
+import { Generation, NumberNull, PromiseVoidFn, VoidFn } from '@/types';
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
@@ -8,7 +8,8 @@ interface GenerationState {
   nextCursorId: NumberNull
   generations: Generation[];
   addGeneration: (generation: Generation) => void;
-  clearGenerations: () => void;
+  clearGenerations: VoidFn;
+  fetchGenerations:  PromiseVoidFn;
 }
 
 export const useGenerationStore = create<GenerationState>()(

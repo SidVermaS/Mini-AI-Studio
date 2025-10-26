@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import Image from "next/image";
 import Label from "@/components/Label";
 import { ClassName } from "@/types";
 import { createGeneration } from "@/lib";
@@ -57,13 +56,12 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
         >
           {preview ? (
             <div className="relative">
-              <Image
+              <img
                 src={preview}
                 alt="Preview"
                 className="h-64 w-64 rounded-lg"
                 width={256}
                 height={256}
-                unoptimized={false}
               />
               <button
                 type="button"

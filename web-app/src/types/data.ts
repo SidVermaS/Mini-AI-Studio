@@ -8,6 +8,7 @@ export type BooleanNull = Nullable<boolean>;
 export type NumberNull = Nullable<number>;
 export type KeyStrStr = Record<string, string>;
 export type StrNullVoidFn = (id: StringNull) => void;
+export type ObjAny = Record<string, any>;
 export type ObjUnknown = Record<string, unknown>;
 export type ObjStr = Record<string, string>;
 export type ObjStrNum = Record<string, string | number>;
@@ -16,6 +17,7 @@ export type Primitive = string | boolean | number | null | undefined;
 export type Email = string
 export type UUID = string;
 export type VoidFn = () => void;
+export type PromiseVoidFn = () => Promise<void>;
 export type Data<T> = {
   data: T[];
 };

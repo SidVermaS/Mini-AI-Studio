@@ -10,17 +10,24 @@ import fastifyHealthcheck from 'fastify-healthcheck';
 import fastifyJwt from '@fastify/jwt';
 import routes from '@routes/index';
 import { authTokenMiddleware,errorMiddleware } from '@middlewares/index';
+import { fastifyStatic } from '@fastify/static';
+import { join } from 'path';
 
 const buildServer = async () => {
     const app = Fastify({ logger: ENV.NODE_ENV !== 'production', ignoreTrailingSlash: true, trustProxy: true });
 
     // Register your routes and middleware here
-    app.register(fastifyCors, {
-        origin: ["*", "http://localhost:3000",],
+    await app
+    .register(fastifyMultipart, {
+        limits: { fileSize: FileConfig.MAX_FILE_SIZE, files: FileConfig.MAX_NO_OF_FILES, } // 10 MB limit
+    }).register(fastifyStatic, {
+            root: join(process.cwd(), 'storage'),
+            prefix: '/storage/', // URL prefix to access files
+        }).register(fastifyCors, {
+        origin: ["*",],
         methods: ['GET', 'POST', 'PATCH', 'DELETE',],
-        credentials: true
-    })
-    .register(fastifyHelmet)
+        credentials: true,
+    }).register(fastifyHelmet,{crossOriginResourcePolicy:{ policy: "cross-origin"}})
     .register(fastifyRateLimit, {
         max: 10,
         timeWindow: 60000,  // 1 minute in milliseconds (60 * 1000)
@@ -30,9 +37,6 @@ const buildServer = async () => {
     .register(fastifyJwt, {
         secret: ENV.JWT_SECRET_KEY,
         sign: { expiresIn: ENV.JWT_EXPIRES_IN }
-    })
-    .register(fastifyMultipart, {
-        limits: { fileSize: FileConfig.MAX_FILE_SIZE, files: FileConfig.MAX_NO_OF_FILES, } // 10 MB limit
     })
     .register(fastifyHealthcheck, {
         healthcheckUrl: '/health',

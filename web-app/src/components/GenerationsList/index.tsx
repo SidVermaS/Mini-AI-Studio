@@ -1,23 +1,25 @@
 "use client";
-
 import { useGenerationStore } from "@/stores";
 import { ClassName, Generation, Status } from "@/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface GenerationsListProps {
   className?: ClassName;
 }
 
-export function GenerationsList({
-  className,
-}: GenerationsListProps) {
-  const { generations, isLoading } = useGenerationStore();
-  
-  const BADGES: Record<Status, ClassName> = {
-    PROCESSING: "bg-yellow-100 text-yellow-800",
-    COMPLETED: "bg-green-100 text-green-800",
-    FAILED: "bg-red-100 text-red-800",
-  };
+const BADGES: Record<Status, ClassName> = {
+  PROCESSING: "bg-yellow-100 text-yellow-800",
+  COMPLETED: "bg-green-100 text-green-800",
+  FAILED: "bg-red-100 text-red-800",
+};
+
+export function GenerationsList({ className }: GenerationsListProps) {
+  const { generations, isLoading, fetchGenerations } = useGenerationStore();
+
+  useEffect(() => {
+    fetchGenerations();
+  }, [fetchGenerations]);
+
   if (isLoading) {
     return (
       <div className="bg-white rounded-xl shadow-lg p-6">
@@ -32,7 +34,7 @@ export function GenerationsList({
   }
 
   return (
-    <div className={`bg-white rounded-xl shadow-lg p-6   ${className}`}>
+    <div className={`bg-white rounded-xl shadow-lg p-6 ${className}`}>
       <h2 className="text-xl font-semibold mb-6 text-gray-900">
         Recent Generations
         <span className="text-sm text-gray-500 ml-2">(Last 5)</span>
@@ -68,20 +70,26 @@ export function GenerationsList({
               <div className="grid grid-cols-2 gap-4 mb-3">
                 <div>
                   <p className="text-xs text-gray-600 mb-1">Original</p>
-                  <img
-                    src={`${gen.inputImageUrl}`}
-                    alt="Original"
-                    className="w-full h-32 object-cover rounded"
-                  />
+                  <div className="relative w-full h-32">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${gen.inputImageUrl}`}
+                      alt="Original"
+                      className="w-full h-32 object-cover rounded"
+                    />
+                  </div>
                 </div>
                 <div>
                   <p className="text-xs text-gray-600 mb-1">Result</p>
                   {gen.status === "COMPLETED" && gen.outputImageUrl ? (
-                    <img
-                      src={`${gen.outputImageUrl}`}
-                      alt="Result"
-                      className="w-full h-32 object-cover rounded"
-                    />
+                    <div className="relative w-full h-32">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${gen.outputImageUrl}`}
+                        alt="Result"
+                        className="w-full h-32 object-cover rounded"
+                      />
+                    </div>
                   ) : gen.status === "FAILED" ? (
                     <div className="w-full h-32 bg-red-50 rounded flex items-center justify-center">
                       <span className="text-red-600 text-sm">❌ Failed</span>

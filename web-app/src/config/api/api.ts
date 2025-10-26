@@ -2,7 +2,7 @@ import { isFilled, toAny } from "@/utils";
 import { APICall, APIHeaders, GenerateURL, Method } from "./types";
 
 import { APIResError, AppError } from "@/errors";
-import { ObjUnknown } from "@/types";
+import { ObjAny, ObjUnknown } from "@/types";
 import { getCookie } from "@/utils/cookie";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000';
@@ -42,12 +42,6 @@ export const generateUrl = (args: GenerateURL): string => {
   return url;
 };
 
-const getHeaders = async (): Promise<APIHeaders> => {
-  const headers: APIHeaders = {
-    'Accept': 'application/json',
-  };
-  return headers;
-};
 /**
  * 
  * @param path 
@@ -58,7 +52,7 @@ const getHeaders = async (): Promise<APIHeaders> => {
 export const apiCall = async <Payload = unknown, Response = unknown>(
   path: string,
   method: Method,
-  { baseUrl: baseUrlParam,isFormData=false, isAuth = true, payload, query, routeId, headers }: APICall<Payload>,
+  { baseUrl: baseUrlParam, isFormData = false, isAuth = true, payload, query, routeId, headers }: APICall<Payload>,
 ): Promise<Response> => {
   try {
     const baseUrl = baseUrlParam || BASE_URL;
@@ -70,13 +64,14 @@ export const apiCall = async <Payload = unknown, Response = unknown>(
       routeId,
     });
 
-    let baseHeaders = await getHeaders();
+    let baseHeaders: APIHeaders = {} as APIHeaders;
 
     if (isFilled(headers)) {
       baseHeaders = { ...baseHeaders, ...headers };
     }
     if (!isFormData && ['POST', 'PATCH', 'PUT'].includes(method) && isFilled(payload)) {
       baseHeaders['Content-Type'] = 'application/json';
+      baseHeaders['Accept'] = 'application/json';
     }
     // if (method === 'DELETE') {
     //   baseHeaders = omit(baseHeaders, ['Content-Type', 'Accept']) as APIHeaders;
@@ -90,15 +85,18 @@ export const apiCall = async <Payload = unknown, Response = unknown>(
       headers: baseHeaders,
       method,
     };
-    if(isFormData && isFilled(payload)){
-      const payloadData=toAny(payload)
-      options.body = Object.keys(payloadData).reduce((formData, key) => {
-        formData.append(key, payloadData[key]);
+    if (isFormData && isFilled(payload)) {
+      const formData = Object.keys(payload!).reduce((formData: FormData, key: string) => {
+        const value = (payload as ObjAny)[key];
+        formData.append(key, value);
         return formData;
       }, new FormData());
+      options.body = formData;
+
     } else if (isFilled(payload)) {
       options.body = JSON.stringify(payload);
     }
+
     const response = await fetch(url, options);
     const contentType = response.headers.get('content-type');
     const isJson = contentType?.includes('application/json');

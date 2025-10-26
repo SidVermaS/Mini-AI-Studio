@@ -3,6 +3,7 @@ import { AppError } from "@errors/index";
 import { GenerationModule } from "@modules/index";
 import { CursorPaginationSchema } from "@schemas/common";
 import { GenerationCreateSchema } from "@schemas/index";
+import { validateFile } from "@utils/index";
 import type { FastifyInstance } from "fastify";
 
 export const generationRoutes = (app: FastifyInstance) => {
@@ -15,11 +16,15 @@ export const generationRoutes = (app: FastifyInstance) => {
         return reply.status(HttpStatus.OK).send(result);
     });
     app.post('/api/v1/generation', { onRequest: [] }, async (request, reply) => {
-        const { data: bodyData, error: bodyError } = GenerationCreateSchema.safeParse(request.body);
+        const data = await request.file();
+        const { data: bodyData, error: bodyError } = GenerationCreateSchema.safeParse({ prompt: 'hello' });
+
         if (bodyError) {
             throw new AppError('GRT003', bodyError);
         }
-        const result = await GenerationModule.create( request,bodyData);
+        
+        validateFile(data);
+        const result = await GenerationModule.create(request, bodyData, data!);
         return reply.status(HttpStatus.OK).send(result);
     });
 }
