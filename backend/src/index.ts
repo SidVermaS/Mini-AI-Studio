@@ -8,8 +8,8 @@ import { fastifyRateLimit } from '@fastify/rate-limit';
 import fastifyMultipart from '@fastify/multipart';
 import fastifyHealthcheck from 'fastify-healthcheck';
 import fastifyJwt from '@fastify/jwt';
-import { authTokenMiddleware } from '@middlewares/auth';
-import routes from './routes';
+import routes from '@routes/index';
+import { authTokenMiddleware,errorMiddleware } from '@middlewares/index';
 
 const buildServer = async () => {
     const app = Fastify({ logger: ENV.NODE_ENV !== 'production', ignoreTrailingSlash: true, trustProxy: true });
@@ -46,6 +46,7 @@ const buildServer = async () => {
         }
     })
     .register(routes)
+    .setErrorHandler(errorMiddleware)
     .decorate('authenticate', authTokenMiddleware);
 
     return app;

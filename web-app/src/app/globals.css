@@ -12,6 +12,7 @@
     --text-secondary-hover: #a64ef3;
     --text-tertiary: #a64ef3;
     --text-tertiary-hover: #8200db;
+    --text-quaternary: #6a7282;
     --border-primary: #d1d5dc;
     --border-primary-hover: #a64ef3;
     --border-primary-focus: #a64ef3;
@@ -76,6 +77,10 @@
   }
   .hover\:text-var-tertiary-hover:hover {
     color: var(--text-tertiary-hover);
+  }
+
+  .text-var-quaternary {
+    color: var(--text-quaternary);
   }
 
   .border-var-primary {

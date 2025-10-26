@@ -21,7 +21,7 @@ const Input = ({
 }: InputProps) => {
   return (
     <div>
-      <Label text={text} htmlFor={id} className={`text-gray-500  ${labelClassName}`} />
+      <Label text={text} htmlFor={id} className={`text-var-quaternary ${labelClassName}`} />
       <input
         {...rest}
         id={id}

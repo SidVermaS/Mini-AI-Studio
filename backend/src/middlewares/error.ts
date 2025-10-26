@@ -35,8 +35,6 @@ export const errorMiddleware = (_error: unknown, _request: FastifyRequest, reply
   } else {
     appError = new AppError('GEN001');
   }
-
-  // console.log(appError);
   reply.status(appError.status).send(appError.json);
   return;
 };
