@@ -4,9 +4,11 @@ import Image from "next/image";
 import Label from "@/components/Label";
 import { ClassName } from "@/types";
 import { createGeneration } from "@/lib";
+import { useGenerationStore } from "@/stores";
 
 export type GenerationFormProps = { className?: ClassName };
 const GenerationForm = ({ className }: GenerationFormProps) => {
+  const { addGeneration } = useGenerationStore();
   const inputFileRef = React.useRef<HTMLInputElement | null>(null);
   const [image, setImage] = useState<File | null>(null);
   const [prompt, setPrompt] = useState<string>("");
@@ -33,7 +35,8 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
     if (image && prompt.trim().length > 1) {
       try {
         // Call the API to create a new generation
-        const _result = await createGeneration({ prompt, file: image });
+        const result = await createGeneration({ prompt, file: image });
+        addGeneration({ ...result, prompt });
       } catch (_error) {
         //
       }

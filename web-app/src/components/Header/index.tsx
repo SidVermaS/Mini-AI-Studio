@@ -5,8 +5,11 @@ import SunOutlined from "@ant-design/icons/SunOutlined";
 import MoonOutlined from "@ant-design/icons/MoonOutlined";
 import HistoryOutlined from "@ant-design/icons/HistoryOutlined";
 import NavOption from "./components/NavOption";
+import { useAuth } from "@/contexts";
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
+  const { user } = useAuth();
+  
   return (
     <header className="flex fixed flex-row justify-between bg-white w-full px-10 py-4">
       <Link href="/">modelia</Link>

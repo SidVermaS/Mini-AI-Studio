@@ -15,7 +15,7 @@ export type GenerationCreate = {
   prompt: string;
   file: File;
 }
-export type GenerationCreateResponse = Pick<Generation, 'id' | 'inputImageUrl' | 'status' | 'outputImageUrl'>;
+export type GenerationCreateResponse = Pick<Generation, 'id' | 'cursorId' |'inputImageUrl' | 'status' | 'outputImageUrl' | 'createdAt'>;
 
 export type GenerationsResponse = {
   generations: Generation[];

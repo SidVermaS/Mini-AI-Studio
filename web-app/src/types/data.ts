@@ -12,7 +12,10 @@ export type ObjUnknown = Record<string, unknown>;
 export type ObjStr = Record<string, string>;
 export type ObjStrNum = Record<string, string | number>;
 export type Primitive = string | boolean | number | null | undefined;
+
+export type Email = string
 export type UUID = string;
+export type VoidFn = () => void;
 export type Data<T> = {
   data: T[];
 };

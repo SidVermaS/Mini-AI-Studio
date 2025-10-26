@@ -5,7 +5,6 @@ export const fetchGeneration = async (query:CursorPagination)=>await apiCall<Cur
     '/api/v1/generation',
     'GET',
     {
-        isAuth: true,
         query: query,
     },
 );
@@ -13,7 +12,6 @@ export const createGeneration = async (params: GenerationCreate) => await apiCal
     '/api/v1/generation',
     'POST',
     {
-        isAuth: true,
         isFormData: true,
         payload: params,
     },

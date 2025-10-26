@@ -1,5 +1,5 @@
 import { apiCall } from "@/config";
-import { AuthLoginPayload, AuthLoginResponse, AuthRegisterPayload, AuthRegisterResponse } from "./types";
+import { AuthLoginPayload, AuthLoginResponse, AuthRegisterPayload, AuthRegisterResponse } from "@/types";
 
 export const login = async (payload: AuthLoginPayload) => await apiCall<AuthLoginPayload, AuthLoginResponse>(
     '/api/v1/auth/login',
