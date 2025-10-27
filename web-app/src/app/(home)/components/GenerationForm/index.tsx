@@ -4,6 +4,7 @@ import Label from "@/components/Label";
 import { ClassName } from "@/types";
 import { createGeneration } from "@/lib";
 import { useGenerationStore } from "@/stores";
+import Button from "@/components/Button";
 
 export type GenerationFormProps = { className?: ClassName };
 const GenerationForm = ({ className }: GenerationFormProps) => {
@@ -41,15 +42,16 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
         // Call the API to create a new generation
         const result = await createGeneration({ prompt, file: image });
         addGeneration({ ...result, prompt });
-        if(result?.status==='COMPLETED'){
-        resetPromptImage();
-      }
+        if (result?.status === "COMPLETED") {
+          resetPromptImage();
+        }
       } catch (_error) {
         //
       }
     }
   };
-  const isEnabled = !!image && prompt.trim().length > 1;
+  // const isEnabled = !!image && prompt.trim().length > 1;
+  const isEnabled=true
   return (
     <div
       className={`bg-var-secondary rounded-xl shadow-lg px-6 py-5 ${className}`}
@@ -112,18 +114,18 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
         />
-        <button
+        <Button
           disabled={!isEnabled}
-          onSubmit={handleSubmit}
+          isLoading
+          onClick={handleSubmit}
           type="submit"
-          className={`mt-4 w-full py-3 rounded-lg transition-colors ${
+          text="Generate"
+            className={`mt-4 w-full py-3 rounded-lg transition-colors ${
             isEnabled
               ? "button-var-primary  hover:button-var-primary-hover"
               : "button-var-primary-disabled"
           }`}
-        >
-          Generate
-        </button>
+        />
       </form>
     </div>
   );

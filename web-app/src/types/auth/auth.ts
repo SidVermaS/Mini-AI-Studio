@@ -1,6 +1,6 @@
 import { Email } from "../data";
 
-export type User = { id: string; name: string; email: Email }
+export type User = { id: string; name: string; email: Email, createdAt: string;};
 
 export type AuthLoginPayload = { email: Email; password: string };
 

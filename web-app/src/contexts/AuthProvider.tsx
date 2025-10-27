@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     removeCookie("token");
     clearUser();
-    router.push("/loin");
+    router.push("/login");
   };
 
   useEffect(() => {

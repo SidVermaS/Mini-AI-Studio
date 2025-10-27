@@ -8,8 +8,8 @@ export type ButtonProps = {
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 const Button = ({text, className, isLoading, ...props}  : ButtonProps) => {
   return (
-    <button  {...props} className={`mt-4 w-full py-1.5 rounded-lg transition-colors button-var-primary  hover:button-var-primary-hover ${className}`} >
-        {isLoading?<Loader />:text}
+    <button  {...props} className={`mt-4 w-full py-1.5 rounded-lg transition-colors button-var-primary  hover:button-var-primary-hover flex justify-center items-center gap-2 ${className}`} >
+        {isLoading && <Loader className='border-white w-4 h-4' />}{text}
     </button>
   )
 }

@@ -28,7 +28,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AuthProvider>
             <Header />
-            <div className="pt-6 md:pt-14"> {children}</div>
+            {children}
           </AuthProvider>
         </ThemeProvider>
       </body>

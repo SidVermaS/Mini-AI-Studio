@@ -23,7 +23,7 @@ const GenerationItem = ({
     <div className="rounded-xl shadow-[0_0_10px_0_rgba(0,0,0,0.2)] px-6 py-4">
       <div className="flex justify-between items-center">
         <div
-          className={`flex justify-center items-center text-center text-[10px] font-medium px-2 py-[0.5px] rounded-md ${STATUS[status]}`}
+          className={`flex justify-center items-center text-center text-[9px] font-medium px-2 py-0.5 rounded-md ${STATUS[status]}`}
         >
           {capitalizeFirstLetter(status)}
         </div>
@@ -33,16 +33,16 @@ const GenerationItem = ({
         </div>
       </div>
       <div className="text-[14px] mt-4">{prompt}</div>
-      <div className="flex justify-between gap-4 mt-2">
+       <div className="flex justify-between gap-2 sm:gap-4 mt-2 ">
         <GenerationImage
           src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${inputImageUrl}`}
           alt="input"
-          className=""
+          className="flex-1 min-w-0"
         />
         <GenerationImage
           src={`${process.env.NEXT_PUBLIC_API_BASE_URL}${outputImageUrl}`}
           alt="output"
-          className=""
+          className="flex-1 min-w-0"
         />
       </div>
     </div>
