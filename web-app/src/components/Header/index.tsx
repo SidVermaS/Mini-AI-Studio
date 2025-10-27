@@ -12,7 +12,7 @@ const Header = () => {
   const { isAuthenticated } = useAuth();
   // if (!isAuthenticated) return null;
   return (
-    <header className="flex fixed flex-row justify-between bg-white w-full px-10 py-4 items-center">
+    <header className="flex fixed flex-row justify-between bg-white w-full px-10 py-4 items-center z-10">
       <Link href="/">
         <Image
           src="/brand-name.png"

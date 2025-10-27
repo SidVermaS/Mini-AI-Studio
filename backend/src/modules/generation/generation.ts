@@ -4,10 +4,9 @@ import { MultipartFile } from "@fastify/multipart";
 import { Generation, Prisma, User } from "@generated/prisma";
 import { CursorData } from "@interfaces/index";
 import { CursorPagination, GenerationCreate, } from "@schemas/index";
-import { pick, saveFile, validateFile } from "@utils/index";
+import { editImageFile, pick, saveBufferAsFile, saveFile, validateFile } from "@utils/index";
 import { pause } from "@utils/process";
 import { FastifyRequest } from "fastify";
-import { stat } from "fs";
 
 export const GenerationModule = {
     fetch: async (request: FastifyRequest, { cursorId, pageSize }: CursorPagination): Promise<CursorData<Pick<Generation, 'id' | 'inputImageUrl' | 'outputImageUrl' | 'status' | 'prompt' | 'cursorId' | 'createdAt'>>> => {
@@ -101,12 +100,20 @@ export const GenerationModule = {
         }
     },
     simulateImageGeneration: async (file: MultipartFile): Promise<string> => {
-        await pause(3000); // Simulate processing time
+        const DELAY_MS = 3000;
         // Randomly throw an error to simulate failure (10% probability)
         if (Math.random() < 0.1) {
+            await pause(DELAY_MS); // Simulate processing time
             throw new AppError('GRT004');
         }
-        const outputImagePath = await saveFile({ file: file!, subPath: 'output' });
+        const startTime = Date.now();
+        const editedImageBuffer = await editImageFile({ file, });
+        const outputImagePath = await saveBufferAsFile({ buffer: editedImageBuffer, mimetype: 'image/png', subPath: 'output' });
+        const endTime = Date.now();
+        const timeTaken = endTime - startTime;
+        if (timeTaken < DELAY_MS) {
+            await pause(DELAY_MS - timeTaken);
+        }
         return outputImagePath;
     }
 }

@@ -7,7 +7,7 @@ export type LabelProps = {
 }
 const Label = ({ text, htmlFor, className }: LabelProps) => {
   return (
-    <label htmlFor={htmlFor} className={`block text-sm font-medium ${className}`}>
+    <label htmlFor={htmlFor} className={`block text-md font-medium ${className}`}>
       {text}
     </label>
   )

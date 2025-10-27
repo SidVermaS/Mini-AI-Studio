@@ -41,6 +41,7 @@ model Generation {
   prompt         String   @db.VarChar(500)
   inputImageUrl  String?   @db.Text
   outputImageUrl String?   @db.Text
+  timeTakenMs   Int?     @db.Integer()
   status         Status   @default(PROCESSING)
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt

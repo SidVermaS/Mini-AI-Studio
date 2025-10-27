@@ -28,6 +28,11 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
       inputFileRef.current?.click();
     }
   };
+  const resetPromptImage = () => {
+    setImage(null);
+    setPreview(null);
+    setPrompt("");
+  };
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
@@ -36,6 +41,9 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
         // Call the API to create a new generation
         const result = await createGeneration({ prompt, file: image });
         addGeneration({ ...result, prompt });
+        if(result?.status==='COMPLETED'){
+        resetPromptImage();
+      }
       } catch (_error) {
         //
       }
@@ -44,10 +52,10 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
   const isEnabled = !!image && prompt.trim().length > 1;
   return (
     <div
-      className={`bg-var-secondary rounded-xl shadow-lg px-6 py-5  ${className}`}
+      className={`bg-var-secondary rounded-xl shadow-lg px-6 py-5 ${className}`}
     >
       <form onSubmit={handleSubmit}>
-        <Label htmlFor="image_file" className="" text="Upload Image" />
+        <Label htmlFor="image_file" text="Upload Image" />
         <div
           className={`border-2 border-dashed border-var-primary  rounded-lg p-6 text-center ${
             !preview ? "hover:border-var-primary-hover" : ""
@@ -59,7 +67,7 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
               <img
                 src={preview}
                 alt="Preview"
-                className="h-64 w-64 rounded-lg"
+                className="h-64 w-64 rounded-lg object-cover"
                 width={256}
                 height={256}
               />

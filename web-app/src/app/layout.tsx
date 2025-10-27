@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import {Mulish } from "next/font/google";
+import { Mulish } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import Header from "@/components/Header";
 import { AuthProvider } from "@/contexts";
-
 
 const mulish = Mulish({
   subsets: ["latin"],
@@ -24,13 +23,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" >
-      <body className={`${mulish.variable} ${mulish.className}`}
-      >
+    <html lang="en">
+      <body className={`${mulish.variable} ${mulish.className}`}>
         <ThemeProvider>
           <AuthProvider>
             <Header />
-            {children}
+            <div className="pt-6 md:pt-14"> {children}</div>
           </AuthProvider>
         </ThemeProvider>
       </body>
