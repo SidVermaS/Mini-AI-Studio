@@ -51,16 +51,16 @@ const GenerationsList = ({ className }: GenerationsListProps) => {
 
   return (
     <div
-      className={`bg-var-secondary rounded-xl shadow-lg px-6 py-5 flex flex-col ${className}`}
+      className={`bg-var-secondary rounded-xl shadow-lg  pr-1 py-5 flex flex-col ${className}`}
     >
-      <div className="text-md font-medium mb-4">Generations</div>
-      <div className="flex-1 overflow-y-auto overflow-x-hidden mr-5 min-h-0">
+      <div className="text-md font-normal  pl-6 mb-4">Generations</div>
+      <div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 pt-2  pl-6 pr-5 ">
         {!isLoading && !generations.length && (
           <div className="text-sm text-var-text-secondary text-center py-8">
             No data found.
           </div>
         )}
-        <div className="space-y-4 px-3">
+        <div className="space-y-4">
           {generations.map((generation: Generation) => (
             <GenerationItem key={generation.id} {...generation} />
           ))}
@@ -69,7 +69,7 @@ const GenerationsList = ({ className }: GenerationsListProps) => {
         {/* Sentinel element for infinite scroll */}
         <div ref={observerTarget} className="h-4" />
 
-        {isLoading && <Loader parentClassName="flex justify-center my-4" />}
+        {false && <Loader parentClassName="flex justify-center" />}
       </div>
     </div>
   );

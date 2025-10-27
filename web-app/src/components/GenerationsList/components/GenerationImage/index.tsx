@@ -14,9 +14,7 @@ const GenerationImage = ({
       {...props}
       src={src}
       alt={alt}
-      className={`rounded-lg object-cover ${className}`}
-      width={300}
-      height={300}
+      className={ `w-36 md:w-56 h-20 md:h-52 rounded-lg object-cover ${className}`}
     />
   );
 };

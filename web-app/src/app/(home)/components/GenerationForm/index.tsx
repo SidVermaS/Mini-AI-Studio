@@ -59,7 +59,7 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
         <div
           className={`border-2 border-dashed border-var-primary  rounded-lg p-6 text-center ${
             !preview ? "hover:border-var-primary-hover" : ""
-          } transition-colors w-full h-72 flex justify-center items-center mt-2`}
+          } transition-colors w-full h-60 md:h-72 flex justify-center items-center mt-2`}
           onClick={handleFileBoxClick}
         >
           {preview ? (
@@ -67,7 +67,7 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
               <img
                 src={preview}
                 alt="Preview"
-                className="h-64 w-64 rounded-lg object-cover"
+                className="h-56 w-56 md:h-64 md:w-64 rounded-lg object-cover"
                 width={256}
                 height={256}
               />
