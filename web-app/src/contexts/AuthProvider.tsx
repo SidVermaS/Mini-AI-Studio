@@ -6,14 +6,13 @@ import {
   useState,
   useEffect,
   ReactNode,
-  use,
   useRef,
 } from "react";
 import { login as loginAPI } from "@/lib";
 import { usePathname, useRouter } from "next/navigation";
 import { AuthLoginPayload, AuthLoginResponse, Nullable, VoidFn } from "@/types";
 import { getCookie, removeCookie, setCookie } from "@/utils";
-import { useUserStore } from "@/stores";
+import { useUserStore, useGenerationStore } from "@/stores";
 
 interface User {
   id: string;
@@ -34,8 +33,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const isAuthenticated = useRef<boolean>(false);
   const { user, setUser, clearUser } = useUserStore();
+  const { clearGenerations } = useGenerationStore();
   const router = useRouter();
-  const pathname = usePathname(); // Get current path
+  const pathname = usePathname();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const login = async (payload: AuthLoginPayload): Promise<void> => {
@@ -54,8 +54,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = () => {
-    removeCookie("token");
+    // Clear all stores
     clearUser();
+    clearGenerations();
+
+    // Clear token
+    removeCookie("token");
+
+    // Clear all localStorage (if you want to clear everything)
+    localStorage.clear();
+
+    // Or clear specific items only:
+    // localStorage.removeItem('user-storage');
+    // localStorage.removeItem('generation-storage');
+
+    // Redirect to login
     router.push("/login");
   };
 
@@ -73,6 +86,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         router.push("/login");
       }
     }
+    setIsLoading(false);
   }, [pathname]);
 
   return (

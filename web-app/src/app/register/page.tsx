@@ -51,7 +51,7 @@ export default function RegisterPage() {
       handleSubmit(onSubmit)(e);
     };
   return (
-    <div className="bg-var-primary h-screen flex justify-center items-center ">
+    <div className="bg-var-primary h-screen pt-12 px-2 md:pt-0 md:px-0 md:flex md:justify-center md:items-center ">
       <div className="rounded-lg shadow-xl p-5 min-w-2/5 min-h-2/5">
         <div className=" text-center">
           <Image

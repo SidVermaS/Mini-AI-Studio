@@ -26,7 +26,8 @@ export const useGenerationStore = create<GenerationState>()(
       clearGenerations: () => set({ generations: [], nextCursorId: null, hasMore: true }),
       fetchMoreGenerations: async () => {
         const { nextCursorId, isLoading, hasMore, generations } = get();
-        if (isLoading || !hasMore || nextCursorId === null) return;
+        
+        if (isLoading || !hasMore ) return;
 
         set({ isLoading: true });
         try {
