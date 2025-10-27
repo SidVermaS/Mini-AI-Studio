@@ -28,6 +28,6 @@
       "@utils/*": ["utils/*"],
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../web-app/src/hooks"],
   "exclude": ["node_modules", "dist"]
 }

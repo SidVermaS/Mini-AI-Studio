@@ -22,7 +22,6 @@ export const generationRoutes = (app: FastifyInstance) => {
         if (bodyError) {
             throw new AppError('GRT003', bodyError);
         }
-        
         validateFile(data);
         const result = await GenerationModule.create(request, bodyData, data!);
         return reply.status(HttpStatus.OK).send(result);

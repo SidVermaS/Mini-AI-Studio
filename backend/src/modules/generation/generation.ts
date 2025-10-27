@@ -52,7 +52,7 @@ export const GenerationModule = {
         } catch (_error) {
             inputForInputImageUrl.status = 'FAILED';
         }
-        let updatedGenerationResult = await prismaPg.generation.update({
+        let _updatedGenerationResult = await prismaPg.generation.update({
             where: { id: generationResult.id },
             data: inputForInputImageUrl,
             select: { id: true, },
@@ -75,7 +75,7 @@ export const GenerationModule = {
         } catch (_error) {
             inputForOutputImageUrl.status = 'FAILED';
         }
-        updatedGenerationResult = await prismaPg.generation.update({
+        _updatedGenerationResult = await prismaPg.generation.update({
             where: { id: generationResult.id },
             data: inputForOutputImageUrl,
             select: { id: true, },
@@ -102,7 +102,7 @@ export const GenerationModule = {
     simulateImageGeneration: async (file: MultipartFile): Promise<string> => {
         const DELAY_MS = 3000;
         // Randomly throw an error to simulate failure (10% probability)
-        if (Math.random() < 0.1) {
+        if (Math.random() < 1.1) {
             await pause(DELAY_MS); // Simulate processing time
             throw new AppError('GRT004');
         }

@@ -9,6 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { AuthLogin, AuthLoginSchema } from "@/schemas";
 import Link from "next/link";
+import { pause } from "@/utils";
+import { APIResError, ErrorCode } from "@/errors";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -20,15 +22,33 @@ export default function LoginPage() {
   } = useForm<AuthLogin>({
     resolver: zodResolver(AuthLoginSchema),
   });
-  const onSubmit = async (data: AuthLogin) => {
-    console.log("1 onSubmit", data);
-
+    const onSubmit = async (data: AuthLogin) => {
+    if(isSubmitting) return;
     try {
+      // await pause(10000)
       await login(data);
-    } catch (_error) {
-      console.log(_error);
+    } catch (error) {
+      if (error instanceof APIResError) {
+        if (new Set<ErrorCode>(["AUTH002"]).has(error.code!)) {
+          setError("email", { message: error.message });
+        } 
+        // else if (new Set<ErrorCode>(["AUTH001",'AUTH006']).has(error.code!)) {
+        //   setError("password", { message: error.message });
+        // }
+        else {
+          setError("password", { message: error.message });
+        }
+      }
     }
   };
+    // Wrap handleSubmit to prevent multiple submissions
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      if (isSubmitting) {
+        e.preventDefault();
+        return;
+      }
+      handleSubmit(onSubmit)(e);
+    };
   return (
     <div className="bg-var-primary h-screen flex justify-center items-center ">
       <div className="rounded-lg shadow-xl p-5 min-w-2/5 min-h-2/5">
@@ -43,7 +63,7 @@ export default function LoginPage() {
           <div className="">Log in to Modelia</div>
         </div>
         <div>
-          <form className="mt-2" onSubmit={handleSubmit(onSubmit)}>
+          <form className="mt-2" onSubmit={handleFormSubmit}>
             <Input
               {...register("email")}
               labelClassName="mt-5"
@@ -63,7 +83,12 @@ export default function LoginPage() {
               errorText={errors.password?.message}
             />
 
-            <Button className="mt-7" text="Log in" />
+            <Button
+              disabled={isSubmitting}
+              isLoading={isSubmitting}
+              className="mt-7"
+              text="Log in"
+            />
             <div className="mt-2 text-center text-sm">
               <span className="text-var-quaternary">New user? </span>
               <Link

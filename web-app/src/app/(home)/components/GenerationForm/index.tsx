@@ -5,63 +5,102 @@ import { ClassName } from "@/types";
 import { createGeneration } from "@/lib";
 import { useGenerationStore } from "@/stores";
 import Button from "@/components/Button";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { GenerationCreate, GenerationCreateSchema } from "@/schemas/generation";
 
 export type GenerationFormProps = { className?: ClassName };
+
 const GenerationForm = ({ className }: GenerationFormProps) => {
   const { addGeneration } = useGenerationStore();
   const inputFileRef = React.useRef<HTMLInputElement | null>(null);
-  const [image, setImage] = useState<File | null>(null);
-  const [prompt, setPrompt] = useState<string>("");
   const [preview, setPreview] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    reset,
+    setError,
+  } = useForm<GenerationCreate>({
+    resolver: zodResolver(GenerationCreateSchema),
+    defaultValues: {
+      prompt: "",
+      file: undefined,
+    },
+  });
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setValue("file", selectedFile, { shouldValidate: true });
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result as string);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(selectedFile);
     }
   };
+
   const handleFileBoxClick = () => {
     if (!preview) {
       inputFileRef.current?.click();
     }
   };
-  const resetPromptImage = () => {
-    setImage(null);
+
+  const handleRemoveImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setValue("file", undefined as any);
     setPreview(null);
-    setPrompt("");
-  };
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    if (image && prompt.trim().length > 1) {
-      try {
-        // Call the API to create a new generation
-        const result = await createGeneration({ prompt, file: image });
-        addGeneration({ ...result, prompt });
-        if (result?.status === "COMPLETED") {
-          resetPromptImage();
-        }
-      } catch (_error) {
-        //
-      }
+    if (inputFileRef.current) {
+      inputFileRef.current.value = "";
     }
   };
-  // const isEnabled = !!image && prompt.trim().length > 1;
-  const isEnabled=true
+
+  const onSubmit = async (data: GenerationCreate) => {
+    try {
+      const result = await createGeneration({
+        prompt: data.prompt,
+        file: data.file,
+      });
+      addGeneration({ ...result, prompt: data.prompt });
+
+      if (result?.status === "COMPLETED") {
+        reset();
+        setPreview(null);
+        if (inputFileRef.current) {
+          inputFileRef.current.value = "";
+        }
+      } else {
+        setError("prompt", { message: "Generation failed. Please try again." });
+      }
+    } catch (_error) {
+      setError("prompt", { message: "Generation failed. Please try again." });
+    }
+  };
+
+  // Wrap handleSubmit to prevent multiple submissions
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (isSubmitting) {
+      e.preventDefault();
+      return;
+    }
+    handleSubmit(onSubmit)(e);
+  };
+
   return (
     <div
       className={`bg-var-secondary rounded-xl shadow-lg px-6 py-5 ${className}`}
     >
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleFormSubmit}>
         <Label htmlFor="image_file" text="Upload Image" />
         <div
-          className={`border-2 border-dashed border-var-primary  rounded-lg p-6 text-center ${
+          className={`border-2 border-dashed ${
+            errors.file ? "border-red-500" : "border-var-primary"
+          } rounded-lg p-6 text-center ${
             !preview ? "hover:border-var-primary-hover" : ""
-          } transition-colors w-full h-60 md:h-72 flex justify-center items-center mt-2`}
+          } transition-colors w-full h-60 md:h-72 flex justify-center items-center mt-2 cursor-pointer`}
           onClick={handleFileBoxClick}
         >
           {preview ? (
@@ -75,10 +114,7 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
               />
               <button
                 type="button"
-                onClick={() => {
-                  setImage(null);
-                  setPreview(null);
-                }}
+                onClick={handleRemoveImage}
                 className="absolute top-0 right-1 text-black-500 rounded-full p-2 text-var-secondary hover:text-var-secondary-hover"
               >
                 ✕
@@ -101,30 +137,35 @@ const GenerationForm = ({ className }: GenerationFormProps) => {
                 Upload image
               </label>
               <p className="text-sm text-var-secondary mt-1">
-                png, jpg up to 10 MB
+                png, jpg, webp up to 10 MB
               </p>
             </div>
           )}
         </div>
+        {errors.file && (
+          <p className="text-red-500 text-sm mt-1">{errors.file.message}</p>
+        )}
+
         <Label htmlFor="prompt" className="mt-7" text="Enter Prompt" />
         <textarea
-          className="w-full mt-2 p-3 border rounded-lg border-var-primary focus:outline-none text-var-primary text-sm"
+          {...register("prompt")}
+          id="prompt"
+          className={`w-full mt-2 p-3 border rounded-lg ${
+            errors.prompt ? "border-red-500" : "border-var-primary"
+          } focus:outline-none text-var-primary text-sm`}
           rows={4}
           placeholder="Enter your prompt..."
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
         />
+        {errors.prompt && (
+          <p className="text-red-500 text-sm mt-1">{errors.prompt.message}</p>
+        )}
+
         <Button
-          disabled={!isEnabled}
-          isLoading
-          onClick={handleSubmit}
+          disabled={isSubmitting}
+          isLoading={isSubmitting}
           type="submit"
           text="Generate"
-            className={`mt-4 w-full py-3 rounded-lg transition-colors ${
-            isEnabled
-              ? "button-var-primary  hover:button-var-primary-hover"
-              : "button-var-primary-disabled"
-          }`}
+          className={`mt-4 w-full py-3 rounded-lg transition-colors`}
         />
       </form>
     </div>

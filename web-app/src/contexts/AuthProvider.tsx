@@ -47,9 +47,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAuthenticated.current = true;
       router.push("/");
     } catch (_error) {
-      //
+      throw _error;
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   const logout = () => {

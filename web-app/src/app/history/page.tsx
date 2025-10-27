@@ -1,5 +1,4 @@
 import GenerationsList from "@/components/GenerationsList";
-import GenerationForm from "./components/GenerationForm";
 
 export default function HomePage() {
   return (

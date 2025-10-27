@@ -18,7 +18,10 @@ const GenerationsList = ({ className }: GenerationsListProps) => {
 
   // Initial fetch
   useEffect(() => {
+    console.log('1 fetchMoreGenerations');
+    
     if (generations.length === 0) {
+    console.log('2 fetchMoreGenerations');
       fetchMoreGenerations();
     }
   }, []);
@@ -65,8 +68,6 @@ const GenerationsList = ({ className }: GenerationsListProps) => {
             <GenerationItem key={generation.id} {...generation} />
           ))}
         </div>
-
-        {/* Sentinel element for infinite scroll */}
         <div ref={observerTarget} className="h-4" />
 
         {false && <Loader parentClassName="flex justify-center" />}

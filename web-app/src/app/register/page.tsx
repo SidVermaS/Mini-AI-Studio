@@ -8,9 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { register as registerAPI } from "@/lib";
 import { AuthRegister, AuthRegisterSchema } from "@/schemas";
 import Link from "next/link";
+import { APIResError, ErrorCode } from "@/errors";
+import { useAuth } from "@/contexts";
 
 export default function RegisterPage() {
-
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -20,16 +22,34 @@ export default function RegisterPage() {
     resolver: zodResolver(AuthRegisterSchema),
   });
   const onSubmit = async (data: AuthRegister) => {
-
+    if (isSubmitting) return;
     try {
-      const _result=await registerAPI(data);
-      console.log(_result);
-      
-    } catch (_error) {
-      console.log(_error);
+      const _result = await registerAPI(data);
+      await login({ email: data.email, password: data.password });
+    } catch (error) {
+      if (error instanceof APIResError) {
+        if (new Set<ErrorCode>(["AUTH002", "AUTH003"]).has(error.code!)) {
+          setError("email", { message: error.message });
+        }
+        // else if (
+        //   new Set<ErrorCode>(["AUTH001", "AUTH006"]).has(error.code!)
+        // ) {
+        //   setError("confirm_password", { message: error.message });
+        // }
+        else {
+          setError("confirm_password", { message: error.message });
+        }
+      }
     }
   };
-  
+  // Wrap handleSubmit to prevent multiple submissions
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      if (isSubmitting) {
+        e.preventDefault();
+        return;
+      }
+      handleSubmit(onSubmit)(e);
+    };
   return (
     <div className="bg-var-primary h-screen flex justify-center items-center ">
       <div className="rounded-lg shadow-xl p-5 min-w-2/5 min-h-2/5">
@@ -44,7 +64,7 @@ export default function RegisterPage() {
           <div className="">Sign up to Modelia</div>
         </div>
         <div>
-          <form className="mt-2" onSubmit={handleSubmit(onSubmit)}>
+          <form className="mt-2" onSubmit={handleFormSubmit}>
             <Input
               {...register("name")}
               labelClassName="mt-5"
@@ -81,13 +101,18 @@ export default function RegisterPage() {
               text="Confirm Password"
               errorText={errors.confirm_password?.message}
             />
-            <Button type='submit' className="mt-7" text="Sign up" />
+            <Button
+              disabled={isSubmitting}
+              isLoading={isSubmitting}
+              type="submit"
+              className="mt-7"
+              text="Sign up"
+            />
             <div className="mt-2 text-center text-sm">
-              <span className="text-var-quaternary">Already have an account? </span>
-              <Link
-                href="/login"
-                className="text-var-tertiary font-semibold"
-              >
+              <span className="text-var-quaternary">
+                Already have an account?{" "}
+              </span>
+              <Link href="/login" className="text-var-tertiary font-semibold">
                 Log in
               </Link>
             </div>
