@@ -21,8 +21,8 @@ const Header = () => {
   const { theme, toggleTheme } = useTheme();
   const { logout } = useAuth();
   const { width } = useScreenWidth();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [mounted, setMounted] = useState<boolean>(false);
 
   // Wait for client-side hydration
   useEffect(() => {
