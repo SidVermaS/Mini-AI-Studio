@@ -102,7 +102,7 @@ export const GenerationModule = {
     simulateImageGeneration: async (file: MultipartFile): Promise<string> => {
         const DELAY_MS = 3000;
         // Randomly throw an error to simulate failure (10% probability)
-        if (Math.random() < 1.1) {
+        if (Math.random() < 0.1) {
             await pause(DELAY_MS); // Simulate processing time
             throw new AppError('GRT004');
         }
