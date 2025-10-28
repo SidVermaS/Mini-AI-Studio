@@ -49,7 +49,7 @@ const NavDropdown = ({ children }: NavDropdownProps) => {
         <div className="absolute top-10 right-8 " ref={dropdownRef}>
           <ul
             id="fiat-currency-dropdown-menu"
-            className="bg-white flex flex-col shadow-lg rounded-lg px-2.5 py-1  gap-2"
+            className="bg-var-secondary flex flex-col shadow-lg rounded-lg py-1  gap-1"
           >
             <DropdownItem text="Profile" onClick={handleProfileClick} />
             <DropdownItem text="Logout" onClick={logout} />

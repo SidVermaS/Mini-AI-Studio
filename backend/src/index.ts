@@ -29,7 +29,7 @@ const buildServer = async () => {
         credentials: true,
     }).register(fastifyHelmet,{crossOriginResourcePolicy:{ policy: "cross-origin"}})
     .register(fastifyRateLimit, {
-        max: 10,
+        max: 50,  // Max 50 requests
         timeWindow: 60000,  // 1 minute in milliseconds (60 * 1000)
         cache: 100,
         ban: 2,  // Ban IP for exceeding limit twice

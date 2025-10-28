@@ -19,7 +19,7 @@ import { BREAKPOINTS } from "@/consts/common/responsive";
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
-  const { logout } = useAuth();
+  const { isAuthenticated,logout } = useAuth();
   const { width } = useScreenWidth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
@@ -30,6 +30,7 @@ const Header = () => {
   }, []);
 
   const isMobile = width < BREAKPOINTS.md;
+  const brandSrc = theme === "dark" ? "/brand-name-dark.png" : "/brand-name.png";
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -43,12 +44,12 @@ const Header = () => {
     closeMobileMenu();
     logout();
   };
-
+  if(!isAuthenticated) {return null;}
   return (
-    <header className="flex fixed flex-row justify-between bg-white w-full px-4 md:px-10 py-4 items-center z-50 shadow-sm">
+    <header className="flex fixed flex-row justify-between bg-var-secondary w-full px-4 md:px-10 py-4 items-center z-50 shadow-sm">
       <Link href="/" onClick={closeMobileMenu}>
         <Image
-          src="/brand-name.png"
+          src={brandSrc}
           alt="modelia"
           width={100}
           height={100}
@@ -199,7 +200,6 @@ const Header = () => {
                         className="py-3 px-2 hover:bg-gray-100 rounded-lg transition-colors duration-150"
                       />
                     </li>
-                    <hr className="my-2" />
                     <li
                       onClick={closeMobileMenu}
                       className="transition-all duration-200 hover:translate-x-1"

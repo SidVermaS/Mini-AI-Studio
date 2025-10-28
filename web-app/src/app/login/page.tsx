@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Input from "@/components/Input";
-import { useAuth } from "@/contexts";
+import { useAuth, useTheme } from "@/contexts";
 import Button from "@/components/Button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +13,7 @@ import { pause } from "@/utils";
 import { APIResError, ErrorCode } from "@/errors";
 
 export default function LoginPage() {
+  const { theme } = useTheme();
   const { login } = useAuth();
   const {
     register,
@@ -22,6 +23,7 @@ export default function LoginPage() {
   } = useForm<AuthLogin>({
     resolver: zodResolver(AuthLoginSchema),
   });
+   const logoSrc = theme === "dark" ? "/logo-dark.png" : "/logo.png";
     const onSubmit = async (data: AuthLogin) => {
     if(isSubmitting) return;
     try {
@@ -54,7 +56,7 @@ export default function LoginPage() {
       <div className="rounded-lg shadow-xl p-5 min-w-2/5 min-h-2/5">
         <div className=" text-center">
           <Image
-            src="/logo.png"
+            src={logoSrc}
             alt="modelia"
             width={300}
             height={300}
