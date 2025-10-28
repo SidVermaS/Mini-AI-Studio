@@ -78,7 +78,11 @@ export const apiCall = async <Payload = unknown, Response = unknown>(
     // }
 
     if (isAuth) {
-      baseHeaders.Authorization = `Bearer ${getCookie('token')}`;
+      const token = getCookie('token');
+      if(!token)  {
+        return Promise.reject(new AppError('No auth token found'));
+      }
+      baseHeaders.Authorization = `Bearer ${token}`;
     }
 
     const options: RequestInit = {

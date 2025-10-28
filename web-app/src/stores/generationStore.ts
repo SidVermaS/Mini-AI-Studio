@@ -38,8 +38,8 @@ export const useGenerationStore = create<GenerationState>()(
             hasMore: result.nextCursorId !== null,
             isLoading: false 
           });
-        } catch (error) {
-          console.error('Failed to fetch more generations:', error);
+        } catch (_error) {
+          // 
           set({ isLoading: false });
         }
       }

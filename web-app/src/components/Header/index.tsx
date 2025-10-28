@@ -19,7 +19,7 @@ import { BREAKPOINTS } from "@/consts/common/responsive";
 
 const Header = () => {
   const { theme, toggleTheme } = useTheme();
-  const { isAuthenticated,logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const { width } = useScreenWidth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
@@ -44,9 +44,9 @@ const Header = () => {
     closeMobileMenu();
     logout();
   };
-  if(!isAuthenticated) {return null;}
-  return (
-    <header className="flex fixed flex-row justify-between bg-var-secondary w-full px-4 md:px-10 py-4 items-center z-50 shadow-sm">
+
+  return !isAuthenticated ? null : (
+    <header className="flex fixed flex-row justify-between bg-var-secondary w-full px-4 md:px-10 py-2 md:py-4 items-center z-50 shadow-sm">
       <Link href="/" onClick={closeMobileMenu}>
         <Image
           src={brandSrc}
@@ -140,7 +140,7 @@ const Header = () => {
               />
               {/* Slide-in menu */}
               <div
-                className={`fixed inset-y-0 right-0 w-64 bg-white z-50 shadow-xl overflow-y-auto transform transition-transform duration-300 ease-in-out ${
+                className={`fixed inset-y-0 right-0 w-64 bg-var-secondary z-50 shadow-xl overflow-y-auto transform transition-transform duration-300 ease-in-out ${
                   isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
                 }`}
               >
@@ -148,7 +148,7 @@ const Header = () => {
                 <div className="flex justify-end px-4 pt-4">
                   <button
                     onClick={closeMobileMenu}
-                    className="text-var-secondary hover:text-var-secondary-hover p-2 rounded-full hover:bg-gray-100 transition-colors duration-150"
+                    className="text-var-secondary hover:text-var-secondary-hover p-2 rounded-full hover:bg-var-primary-hover transition-colors duration-150"
                     aria-label="Close menu"
                   >
                     <CloseOutlined className="text-[20px]" />
@@ -165,7 +165,7 @@ const Header = () => {
                         <NavOption
                           icon={<HomeOutlined className="text-[16px]" />}
                           text="Home"
-                          className="py-3 px-2 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+                          className="py-3 px-2 hover:bg-var-primary-hover rounded-lg transition-colors duration-150"
                         />
                       </Link>
                     </li>
@@ -177,7 +177,7 @@ const Header = () => {
                         <NavOption
                           icon={<HistoryOutlined className="text-[16px]" />}
                           text="History"
-                          className="py-3 px-2 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+                          className="py-3 px-2 hover:bg-var-primary-hover rounded-lg transition-colors duration-150"
                         />
                       </Link>
                     </li>
@@ -197,7 +197,7 @@ const Header = () => {
                           )
                         }
                         text="Theme"
-                        className="py-3 px-2 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+                        className="py-3 px-2 hover:bg-var-primary-hover rounded-lg transition-colors duration-150"
                       />
                     </li>
                     <li
@@ -208,7 +208,7 @@ const Header = () => {
                         <NavOption
                           icon={<UserOutlined className="text-[16px]" />}
                           text="Profile"
-                          className="py-3 px-2 hover:bg-gray-100 rounded-lg transition-colors duration-150"
+                          className="py-3 px-2 hover:bg-var-primary-hover rounded-lg transition-colors duration-150"
                         />
                       </Link>
                     </li>
@@ -219,7 +219,7 @@ const Header = () => {
                       <NavOption
                         icon={<LogoutOutlined className="text-[16px]" />}
                         text="Logout"
-                        className="py-3 px-2 hover:bg-gray-100 rounded-lg text-red-600 transition-colors duration-150"
+                        className="py-3 px-2 hover:bg-var-primary-hover rounded-lg text-red-600 transition-colors duration-150"
                       />
                     </li>
                   </ul>

@@ -5,6 +5,7 @@ import { ClassName } from "@/types/styles";
 import React, { useEffect, useRef } from "react";
 import GenerationItem from "./components/GenerationItem";
 import Loader from "../Loader";
+import { useAuth } from "@/contexts";
 
 interface GenerationsListProps {
   className?: ClassName;
@@ -13,15 +14,12 @@ interface GenerationsListProps {
 const GenerationsList = ({ className }: GenerationsListProps) => {
   const { generations, isLoading, hasMore, fetchMoreGenerations } =
     useGenerationStore();
-
+  const { isAuthenticated } = useAuth();
   const observerTarget = useRef<HTMLDivElement>(null);
 
   // Initial fetch
   useEffect(() => {
-    console.log('1 fetchMoreGenerations');
-    
-    if (generations.length === 0) {
-    console.log('2 fetchMoreGenerations');
+    if (isAuthenticated &&generations.length === 0) {
       fetchMoreGenerations();
     }
   }, []);
@@ -30,8 +28,8 @@ const GenerationsList = ({ className }: GenerationsListProps) => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoading) {
-          fetchMoreGenerations();
+        if (entries[0].isIntersecting && hasMore && !isLoading && isAuthenticated) {
+             fetchMoreGenerations();
         }
       },
       {

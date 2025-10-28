@@ -31,7 +31,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const isAuthenticated = useRef<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const { user, setUser, clearUser } = useUserStore();
   const { clearGenerations } = useGenerationStore();
   const router = useRouter();
@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const response: AuthLoginResponse = await loginAPI(payload);
       setUser(response.user);
       setCookie("token", response.token);
-      isAuthenticated.current = true;
+      setIsAuthenticated(true);
       router.push("/");
     } catch (_error) {
       throw _error;
@@ -76,12 +76,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const token = getCookie("token");
     const isAuthPage = new Set(["/login", "/register"]).has(pathname);
     if (token) {
-      isAuthenticated.current = true;
+      setIsAuthenticated(true);
       if (isAuthPage) {
         router.push("/");
       }
     } else {
-      isAuthenticated.current = false;
+      setIsAuthenticated(false);
       if (!isAuthPage) {
         router.push("/login");
       }
@@ -93,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        isAuthenticated: isAuthenticated.current,
+        isAuthenticated,
         isLoading,
         login,
         logout,
