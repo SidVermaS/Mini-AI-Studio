@@ -12,8 +12,8 @@ A full-stack web application for simulating AI-powered image generation.<br/>
 - **Styling**: Tailwind CSS
 - **Containerization**: Docker
 
-## Backend
-### Local Setup
+## Local Setup
+### Backend
 1. Create a `.env.local` file in the `backend` directory based on the `.env.example` file.
 2. Install the dependencies:
    ```bash
@@ -25,9 +25,17 @@ A full-stack web application for simulating AI-powered image generation.<br/>
    docker compose -f docker-compose-local.yaml --env-file .env.local up
    ```
 
-## Frontend
-
-
+### Frontend
+1. Create a `.env` file in the `web-app` directory based on the `.env.example` file.
+2. Install the dependencies:
+   ```bash
+   cd web-app
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
 
 
