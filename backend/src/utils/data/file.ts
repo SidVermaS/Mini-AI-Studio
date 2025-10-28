@@ -37,20 +37,20 @@ export const saveFile = async ({ file, subPath }: { file: MultipartFile, subPath
 }
 export const editImageFile = async ({ file }: { file: MultipartFile }): Promise<Buffer> => {
     try {
-        
 
-    // Convert file to Buffer
-    const inputBuffer = await file.toBuffer();
-    const image = sharp(inputBuffer);
-    // Get image metadata for sizing
-    const metadata = await image.metadata();
-    const { width = 800, height = 600 } = metadata;
 
- // Each strip covers one-third of the width
-  const stripWidth = Math.floor(width / 3);
+        // Convert file to Buffer
+        const inputBuffer = await file.toBuffer();
+        const image = sharp(inputBuffer);
+        // Get image metadata for sizing
+        const metadata = await image.metadata();
+        const { width = 800, height = 600 } = metadata;
 
-  // Create SVG overlay with 3 translucent vertical strips
-  const svg = `
+        // Each strip covers one-third of the width
+        const stripWidth = Math.floor(width / 3);
+
+        // Create SVG overlay with 3 translucent vertical strips
+        const svg = `
     <svg width="${width}" height="${height}">
       <rect x="0" y="0" width="${stripWidth}" height="${height}" fill="rgba(0, 0, 255, 0.2)" />
       <rect x="${stripWidth}" y="0" width="${stripWidth}" height="${height}" fill="rgba(255, 0, 0, 0.2)" />
@@ -58,16 +58,14 @@ export const editImageFile = async ({ file }: { file: MultipartFile }): Promise<
     </svg>
   `;
 
-  // Overlay the SVG on top of the image
-  const outputBuffer = await image
-    .composite([{ input: Buffer.from(svg), top: 0, left: 0 }])
-    .png()
-    .toBuffer();
-    return outputBuffer;
-        } catch (error) {
-     console.log('1 eif error');
-     console.log(error);
-        
+        // Overlay the SVG on top of the image
+        const outputBuffer = await image
+            .composite([{ input: Buffer.from(svg), top: 0, left: 0 }])
+            .png()
+            .toBuffer();
+        return outputBuffer;
+    } catch (_error) {
+        // 
     }
 }
 export const saveBufferAsFile = async ({ buffer, mimetype = 'image/png', subPath }: { buffer: Buffer, mimetype: MimeTypes, subPath: 'uploads' | 'output' }): Promise<string> => {
