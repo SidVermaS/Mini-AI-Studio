@@ -1,6 +1,6 @@
 # Mini AI Studio
-
-A full-stack web application for simulating AI-powered image generation.
+A full-stack web application for simulating AI-powered image generation.<br/>
+[Screen Recording Video](https://www.loom.com/share/239e97dfd66f4067ba714fa4ccc2ee62)
 
 ## Tech Stack
 
